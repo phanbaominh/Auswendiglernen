@@ -1,0 +1,41 @@
+[
+  {
+    "id": "1",
+    "name": "Basic",
+    "fieldList": [
+      "front",
+      "back",
+      "page"
+    ],
+    "templateList": [
+      {
+        "name": "Template 1",
+        "templateFront": "Front: {{front}}",
+        "templateBack": "Back: {{back}}",
+        "styling": ".card { color: red; };"
+      },
+      {
+        "name": "Template 2",
+        "templateFront": "{{front}}",
+        "templateBack": "{{back}}",
+        "styling": ".card { color: blue; };"
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "name": "Basic 2",
+    "fieldList": [
+      "front",
+      "back"
+    ],
+    "templateList": [
+      {
+        "name": "Template 1",
+        "templateFront": "Front: {{front}}",
+        "templateBack": "Back: {{back}}",
+        "styling": ".card { color: red; };"
+      }
+    ]
+  }
+]
