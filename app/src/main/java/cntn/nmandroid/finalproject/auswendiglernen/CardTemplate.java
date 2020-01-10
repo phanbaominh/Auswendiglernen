@@ -1,6 +1,7 @@
 package cntn.nmandroid.finalproject.auswendiglernen;
 
 import android.util.JsonReader;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -42,6 +43,14 @@ public class CardTemplate {
         reader.endArray();
 
         return ans;
+    }
+
+    Card render(ArrayList<String> fieldList, ArrayList<String> valueList) {
+        Card card = new Card();
+        card.htmlFront = CommonParser.render(templateFront, fieldList, valueList);
+        card.htmlBack = CommonParser.render(templateBack, fieldList, valueList);
+        card.css = styling;
+        return card;
     }
 
     @NonNull

@@ -6,6 +6,7 @@ import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.util.JsonReader;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,8 +31,17 @@ public class MainActivity extends AppCompatActivity {
             JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
 
             ArrayList<NoteType> arrayList = NoteType.parseList(reader);
+            NoteType noteType = arrayList.get(0);
+            ArrayList<String> valueList = new ArrayList<>();
+            valueList.add("front value");
+            valueList.add("back value");
+            valueList.add("page number");
+
+//            Toast.makeText(this, String.valueOf(noteType.fieldList.size()), Toast.LENGTH_SHORT).show();
+
+            Card card = noteType.templateList.get(0).render(noteType.fieldList, valueList);
             TextView textView = findViewById(R.id.testTextView);
-            textView.setText(arrayList.get(0).toString());
+            textView.setText(card.htmlFront);
         } catch (IOException e) {
             e.printStackTrace();
         }

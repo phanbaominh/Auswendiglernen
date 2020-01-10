@@ -15,4 +15,14 @@ public class CommonParser {
         reader.endArray();
         return ans;
     }
+
+    static String render(String template, ArrayList<String> fieldList, ArrayList<String> valueList) {
+        String ans = String.valueOf(template);
+        for (int i = 0; i < fieldList.size(); ++i) {
+            String field = "{{" + fieldList.get(i) + "}}";
+            String value = valueList.get(i);
+            ans = ans.replace(field, value);
+        }
+        return ans;
+    }
 }

@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class NoteType {
-    private String id;
-    private String name;
-    private ArrayList<String> fieldList;
-    private ArrayList<CardTemplate> templateList;
+    public String id;
+    public String name;
+    public ArrayList<String> fieldList;
+    public ArrayList<CardTemplate> templateList;
 
     static NoteType parse(JsonReader reader) throws IOException {
         NoteType noteType = new NoteType();
