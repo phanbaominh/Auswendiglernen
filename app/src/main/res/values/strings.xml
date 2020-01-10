@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Auswendiglernen</string>
+    <string name="Open">Drawer Opened</string>
+    <string name="Close">Drawer Closed</string>
 </resources>
