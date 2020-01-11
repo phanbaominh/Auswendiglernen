@@ -5,6 +5,8 @@ import android.content.res.AssetManager;
 import android.util.JsonReader;
 import android.util.Pair;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DataReader {
-    static Pair<ArrayList<NoteType>, ArrayList<Deck>> load(
+    private static Pair<ArrayList<NoteType>, ArrayList<Deck>> load(
             InputStream typeInputStream,
             InputStream deckInputStream)
             throws IOException {
@@ -54,5 +56,23 @@ public class DataReader {
         }
 
         return load(typeStream, deckStream);
+    }
+
+    static ArrayList<NoteType> loadNoteTypeFromFile(File f) throws IOException {
+        FileInputStream inputStream = new FileInputStream(f);
+        JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
+        return NoteType.parseList(reader);
+    }
+
+    static ArrayList<Deck> loadDeckFromFile(File f, ArrayList<NoteType> typeList) throws IOException {
+        // Create hash map for fast reference from ID to NoteType
+        Map<String, NoteType> typeIdMap = new HashMap<>();
+        for (NoteType type : typeList) {
+            typeIdMap.put(type.getId(), type);
+        }
+
+        FileInputStream inputStream = new FileInputStream(f);
+        JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
+        return Deck.parseList(reader, typeIdMap);
     }
 }
