@@ -2,6 +2,9 @@ package cntn.nmandroid.finalproject.auswendiglernen;
 
 import android.util.JsonReader;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -24,5 +27,13 @@ public class CommonParser {
             ans = ans.replace(field, value);
         }
         return ans;
+    }
+
+    static JSONArray stringArrayToJSON(ArrayList<String> arr) {
+        JSONArray jsonArray = new JSONArray();
+        for (int i = 0; i < arr.size(); ++i) {
+            jsonArray.put(arr.get(i));
+        }
+        return jsonArray;
     }
 }

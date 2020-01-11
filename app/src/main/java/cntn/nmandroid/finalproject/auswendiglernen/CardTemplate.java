@@ -2,6 +2,9 @@ package cntn.nmandroid.finalproject.auswendiglernen;
 
 import android.util.JsonReader;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -83,5 +86,13 @@ public class CardTemplate {
         reader.endArray();
 
         return ans;
+    }
+
+    JSONObject toJSON() throws JSONException {
+        JSONObject obj = new JSONObject();
+        obj.put("templateFront", templateFront);
+        obj.put("templateBack", templateBack);
+        obj.put("styling", styling);
+        return obj;
     }
 }

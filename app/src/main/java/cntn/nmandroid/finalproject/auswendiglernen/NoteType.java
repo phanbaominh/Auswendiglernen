@@ -4,6 +4,10 @@ import android.util.JsonReader;
 
 import androidx.annotation.NonNull;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -92,5 +96,20 @@ public class NoteType {
         reader.endArray();
 
         return ans;
+    }
+
+    JSONObject toJSON() throws JSONException {
+        JSONObject obj = new JSONObject();
+        obj.put("id", id);
+        obj.put("name", name);
+        obj.put("fieldList", CommonParser.stringArrayToJSON(fieldList));
+
+        JSONArray templateList = new JSONArray();
+        for (int i = 0; i < this.templateList.size(); ++i) {
+            templateList.put(this.templateList.get(i).toJSON());
+        }
+        obj.put("templateList", templateList);
+
+        return obj;
     }
 }

@@ -9,13 +9,11 @@
     ],
     "templateList": [
       {
-        "name": "Template 1",
         "templateFront": "Front: {{front}}. Page: {{page}}",
         "templateBack": "Back: {{back}}",
         "styling": ".card { color: red; };"
       },
       {
-        "name": "Template 2",
         "templateFront": "{{front}}",
         "templateBack": "{{back}}",
         "styling": ".card { color: blue; };"
@@ -31,7 +29,6 @@
     ],
     "templateList": [
       {
-        "name": "Template 1",
         "templateFront": "Front: {{front}}",
         "templateBack": "Back: {{back}}",
         "styling": ".card { color: red; };"

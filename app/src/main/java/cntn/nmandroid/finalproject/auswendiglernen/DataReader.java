@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DataLoader {
+public class DataReader {
     static Pair<ArrayList<NoteType>, ArrayList<Deck>> load(InputStream typeInputStream, InputStream deckInputStream) throws IOException {
         JsonReader typeReader = new JsonReader(new InputStreamReader(typeInputStream));
         JsonReader deckReader = new JsonReader(new InputStreamReader(deckInputStream));

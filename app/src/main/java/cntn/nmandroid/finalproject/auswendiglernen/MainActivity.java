@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.util.Pair;
 import android.widget.TextView;
 
+import org.json.JSONException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -28,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
             InputStream typeIs = manager.open("note-type.json");
             InputStream deckIs = manager.open("deck.json");
 
-            Pair<ArrayList<NoteType>, ArrayList<Deck>> tmp = DataLoader.load(typeIs, deckIs);
-//            ArrayList<NoteType> typeList = tmp.first;
+            Pair<ArrayList<NoteType>, ArrayList<Deck>> tmp = DataReader.load(typeIs, deckIs);
+            ArrayList<NoteType> typeList = tmp.first;
             ArrayList<Deck> deckList = tmp.second;
 
             Deck deck0 = deckList.get(1);
@@ -37,7 +39,9 @@ public class MainActivity extends AppCompatActivity {
             Card card = note0.getCardList().get(0);
             TextView textView = findViewById(R.id.testTextView);
             textView.setText(card.htmlFront);
-        } catch (IOException e) {
+
+            DataWriter.writeType(typeList, this);
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
     }
