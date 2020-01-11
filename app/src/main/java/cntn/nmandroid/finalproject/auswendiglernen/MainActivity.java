@@ -24,13 +24,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadNoteTypeData() {
-        AssetManager manager = this.getAssets();
-
         try {
-            InputStream typeIs = manager.open("note-type.json");
-            InputStream deckIs = manager.open("deck.json");
-
-            Pair<ArrayList<NoteType>, ArrayList<Deck>> tmp = DataReader.load(typeIs, deckIs);
+            Pair<ArrayList<NoteType>, ArrayList<Deck>> tmp = DataReader.initApp(this);
             ArrayList<NoteType> typeList = tmp.first;
             ArrayList<Deck> deckList = tmp.second;
 
