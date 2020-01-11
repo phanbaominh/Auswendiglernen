@@ -2,6 +2,10 @@ package cntn.nmandroid.finalproject.auswendiglernen;
 
 import android.util.JsonReader;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -84,5 +88,20 @@ public class Note {
         reader.endArray();
 
         return ans;
+    }
+
+    public JSONObject toJSON() throws JSONException {
+        JSONObject obj = new JSONObject();
+
+        obj.put("noteTypeId", noteType.getId());
+        obj.put("valueList", CommonParser.stringArrayToJSON(valueList));
+
+        JSONArray cardList = new JSONArray();
+        for (int i = 0; i < this.cardList.size(); ++i) {
+            cardList.put(this.cardList.get(i).toJSON());
+        }
+        obj.put("cardList", cardList);
+
+        return obj;
     }
 }

@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
             textView.setText(card.htmlFront);
 
             DataWriter.writeType(typeList, this);
+            DataWriter.writeDeck(deckList, this);
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }

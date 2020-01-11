@@ -2,6 +2,10 @@ package cntn.nmandroid.finalproject.auswendiglernen;
 
 import android.util.JsonReader;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -15,6 +19,18 @@ public class Deck {
     }
     public void setNoteList(ArrayList<Note> noteList) {
         this.noteList = noteList;
+    }
+
+    JSONObject toJSON() throws JSONException {
+        JSONObject obj = new JSONObject();
+        obj.put("name", name);
+
+        JSONArray noteList = new JSONArray();
+        for (int i = 0; i < this.noteList.size(); ++i) {
+            noteList.put(this.noteList.get(i).toJSON());
+        }
+        obj.put("noteList", noteList);
+        return obj;
     }
 
     static Deck parse(JsonReader reader, Map<String, NoteType> typeIdMap) throws IOException {

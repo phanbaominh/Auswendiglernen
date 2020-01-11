@@ -23,4 +23,16 @@ public class DataWriter {
 
         out.close();
     }
+
+    static void writeDeck(ArrayList<Deck> deckList, Context context) throws IOException, JSONException {
+        FileOutputStream out = context.openFileOutput("deck.json", Context.MODE_PRIVATE);
+
+        JSONArray jsonArray = new JSONArray();
+        for (int i = 0; i < deckList.size(); ++i) {
+            jsonArray.put(deckList.get(i).toJSON());
+        }
+        out.write(jsonArray.toString().getBytes());
+
+        out.close();
+    }
 }
