@@ -24,7 +24,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private DataAdapter dataAdapter;
+    public static DataAdapter dataAdapter;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView nagivationView;

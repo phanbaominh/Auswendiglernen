@@ -2,4 +2,7 @@
     <string name="app_name">Auswendiglernen</string>
     <string name="Open">Drawer Opened</string>
     <string name="Close">Drawer Closed</string>
+    <string name="dialog_title_note_types">Choose Note Types</string>
+    <string name="dialog_ok">Ok</string>
+    <string name="dialog_cancel">Cancel</string>
 </resources>

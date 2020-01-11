@@ -10,17 +10,22 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
 
-public class NoteTypeActivity extends AppCompatActivity {
-    private DataAdapter dataAdapter;
-    public static ArrayList<Data> dataArrayList;
+public class NoteTypeActivity extends AppCompatActivity
+        implements AddNoteTypesDialogFragment.AddNoteTypesDialogListener {
+    private NoteTypeAdapter dataAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,13 +38,15 @@ public class NoteTypeActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+
+
         createListView();
     }
 
     private void createListView(){
-        dataArrayList = new ArrayList<>();
-        dataAdapter = new DataAdapter(this, dataArrayList);
-        dataArrayList.add(new Data("Gay"));
+        //dataArrayList = new ArrayList<>();
+        dataAdapter = new NoteTypeAdapter(this, MainActivity.dataArrayList);
+       // dataArrayList.add(new Data("Gay"));
 
         ListView listView = findViewById(R.id.listview_note_types);
         registerForContextMenu(listView);
@@ -60,6 +67,7 @@ public class NoteTypeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.actionbar_item_add_note_types:
+                showNoticeDialog();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -103,5 +111,25 @@ public class NoteTypeActivity extends AppCompatActivity {
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+    public void showNoticeDialog() {
+        // Create an instance of the dialog fragment and show it
+        DialogFragment dialog = new AddNoteTypesDialogFragment();
+        dialog.show(getSupportFragmentManager(), "AddNoteTypesDialogFragment");
+
+
+    }
+
+    // The dialog fragment receives a reference to this Activity through the
+    // Fragment.onAttach() callback, which it uses to call the following methods
+    // defined by the NoticeDialogFragment.NoticeDialogListener interface
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        // User touched the dialog's positive button
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        // User touched the dialog's negative button
     }
 }

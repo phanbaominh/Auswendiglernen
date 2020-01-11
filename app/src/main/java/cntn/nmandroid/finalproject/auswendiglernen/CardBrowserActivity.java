@@ -30,7 +30,7 @@ public class CardBrowserActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView nagivationView;
-    public static ArrayList<Data> dataArrayList;
+    //public static ArrayList<Data> dataArrayList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,10 +45,7 @@ public class CardBrowserActivity extends AppCompatActivity {
     }
 
     private void createListView(){
-        dataArrayList = new ArrayList<>();
-        dataAdapter = new CardBrowserAdapter(this,dataArrayList);
-        dataArrayList.add(new Data("Gay"));
-        dataArrayList.add(new Data("Gay"));
+        dataAdapter = new CardBrowserAdapter(this,MainActivity.dataArrayList);
 
         ListView listView = findViewById(R.id.listview_card_browser);
         listView.setAdapter(dataAdapter);

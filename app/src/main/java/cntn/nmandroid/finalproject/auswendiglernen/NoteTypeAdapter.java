@@ -36,7 +36,6 @@ public class NoteTypeAdapter extends ArrayAdapter<Data> {
         TextView textViewName = view.findViewById(R.id.textview_listview_name_note_types);
         TextView textViewCount = view.findViewById(R.id.textview_listview_count_note_types);
         textViewName.setText(data.getText());
-        textViewCount.setText(data.getText());
 
     }
     private View createViewWithLayout(int layoutID) {
