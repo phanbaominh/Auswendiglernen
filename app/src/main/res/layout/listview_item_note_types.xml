@@ -11,5 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/textview_listview_count_note_types"
+        android:text="0 notes"
         />
 </LinearLayout>

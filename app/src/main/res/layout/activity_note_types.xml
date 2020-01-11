@@ -3,6 +3,30 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/activity_note_types">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_note_types"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark" >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Manage Note Types"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="X note types available"
+                android:id="@+id/actionbar_item_count_note_types"/>
+        </LinearLayout>
+
+    </androidx.appcompat.widget.Toolbar>
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

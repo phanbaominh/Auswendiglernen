@@ -17,6 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".CardBrowserActivity"></activity>
+        <activity android:name=".NoteTypeActivity"></activity>
     </application>
 
 </manifest>

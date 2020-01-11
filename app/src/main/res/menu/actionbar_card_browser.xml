@@ -2,13 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/actionbar_item_spinner_card_browser"
-        android:visible="true"
-        app:showAsAction="collapseActionView"
-        android:title="Decks"
-        app:actionViewClass="android.widget.Spinner" />
-
-    <item
         android:id="@+id/actionbar_item_search_card_browser"
         app:showAsAction="ifRoom"
         android:title="Search"
