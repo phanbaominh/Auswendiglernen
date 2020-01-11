@@ -10,7 +10,7 @@
     "templateList": [
       {
         "name": "Template 1",
-        "templateFront": "Front: {{front}}",
+        "templateFront": "Front: {{front}}. Page: {{page}}",
         "templateBack": "Back: {{back}}",
         "styling": ".card { color: red; };"
       },

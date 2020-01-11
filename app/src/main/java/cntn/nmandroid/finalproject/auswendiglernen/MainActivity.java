@@ -4,13 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.util.JsonReader;
+import android.util.Pair;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,19 +25,16 @@ public class MainActivity extends AppCompatActivity {
         AssetManager manager = this.getAssets();
 
         try {
-            InputStream inputStream = manager.open("note-type.json");
-            JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
+            InputStream typeIs = manager.open("note-type.json");
+            InputStream deckIs = manager.open("deck.json");
 
-            ArrayList<NoteType> arrayList = NoteType.parseList(reader);
-            NoteType noteType = arrayList.get(0);
-            ArrayList<String> valueList = new ArrayList<>();
-            valueList.add("front value");
-            valueList.add("back value");
-            valueList.add("page number");
+            Pair<ArrayList<NoteType>, ArrayList<Deck>> tmp = DataLoader.load(typeIs, deckIs);
+//            ArrayList<NoteType> typeList = tmp.first;
+            ArrayList<Deck> deckList = tmp.second;
 
-//            Toast.makeText(this, String.valueOf(noteType.fieldList.size()), Toast.LENGTH_SHORT).show();
-
-            Card card = noteType.templateList.get(0).render(noteType.fieldList, valueList);
+            Deck deck0 = deckList.get(1);
+            Note note0 = deck0.getNoteList().get(0);
+            Card card = note0.getCardList().get(0);
             TextView textView = findViewById(R.id.testTextView);
             textView.setText(card.htmlFront);
         } catch (IOException e) {

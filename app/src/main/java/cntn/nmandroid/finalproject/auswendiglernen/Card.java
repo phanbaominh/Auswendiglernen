@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Card {
+    public String attr;
+
     public String htmlFront;
     public String htmlBack;
     public String css;
@@ -17,17 +19,12 @@ public class Card {
         while (reader.hasNext()) {
             String name = reader.nextName();
             switch (name) {
-                case "htmlFront":
-                    card.htmlFront = reader.nextString();
-                    break;
-                case "htmlBack":
-                    card.htmlBack = reader.nextString();
-                    break;
-                case "css":
-                    card.css = reader.nextString();
+                case "attr":
+                    card.attr = reader.nextString();
                     break;
                 default:
                     reader.skipValue();
+                    break;
             }
         }
         reader.endObject();

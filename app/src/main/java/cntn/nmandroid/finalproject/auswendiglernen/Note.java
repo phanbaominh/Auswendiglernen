@@ -4,23 +4,26 @@ import android.util.JsonReader;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Note {
-    private String noteTypeId;
+    private NoteType noteType;
     private ArrayList<String> valueList;
     private ArrayList<Card> cardList;
 
     public ArrayList<Card> getCardList() {
-        return cardList;
-    }
-    public String getNoteTypeId() {
-        return noteTypeId;
+        ArrayList<Card> ans = (ArrayList<Card>)this.cardList.clone();
+        for (int i = 0; i < noteType.getTemplateList().size(); ++i) {
+            CardTemplate tpl = noteType.getTemplateList().get(i);
+            Card renderedCard = tpl.render(noteType.getFieldList(), valueList);
+            ans.get(i).htmlFront = renderedCard.htmlFront;
+            ans.get(i).htmlBack = renderedCard.htmlBack;
+            ans.get(i).css = renderedCard.css;
+        }
+        return ans;
     }
     public ArrayList<String> getValueList() {
         return valueList;
-    }
-    public void setNoteTypeId(String noteTypeId) {
-        this.noteTypeId = noteTypeId;
     }
     public void setValueList(ArrayList<String> valueList) {
         this.valueList = valueList;
@@ -30,7 +33,7 @@ public class Note {
     }
 
     public Note(NoteType noteType, ArrayList<String> valueList) {
-        this.noteTypeId = noteType.getId();
+        this.noteType = noteType;
         this.valueList = valueList;
         this.cardList = new ArrayList<>();
         for (int i = 0; i < noteType.getTemplateList().size(); ++i) {
@@ -39,7 +42,7 @@ public class Note {
         }
     }
 
-    static Note parse(JsonReader reader) throws IOException {
+    static Note parse(JsonReader reader, Map<String, NoteType> typeIdMap) throws IOException {
         Note note = new Note();
 
         reader.beginObject();
@@ -47,7 +50,11 @@ public class Note {
             String name = reader.nextName();
             switch (name) {
                 case "noteTypeId":
-                    note.noteTypeId = reader.nextString();
+                    String typeId = reader.nextString();
+                    if (!typeIdMap.containsKey(typeId)) {
+                        return null;
+                    }
+                    note.noteType = typeIdMap.get(typeId);
                     break;
                 case "valueList":
                     note.valueList = CommonParser.parseStringList(reader);
@@ -64,12 +71,15 @@ public class Note {
         return note;
     }
 
-    static ArrayList<Note> parseList(JsonReader reader) throws IOException {
+    static ArrayList<Note> parseList(JsonReader reader, Map<String, NoteType> typeIdMap) throws IOException {
         ArrayList<Note> ans = new ArrayList<>();
 
         reader.beginArray();
         while (reader.hasNext()) {
-            ans.add(parse(reader));
+            Note note = parse(reader, typeIdMap);
+            if (note != null) {
+                ans.add(note);
+            }
         }
         reader.endArray();
 
