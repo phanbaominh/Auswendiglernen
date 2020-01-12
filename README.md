@@ -211,6 +211,6 @@ Cards are represented only by `attr` (which is a placeholder for actual value su
 
 2. DataWriter
 
-   - `static void writeType(ArrayList<NoteType> typeList, Context context)`: write NoteType and CardTemplate data to user's local storage.
+   - `static void export(File f, ArrayList<NoteType> typeList, ArrayList<Deck> deckList)`: export all data to a File.
 
-   - `static void writeDeck(ArrayList<Deck> deckList, Context context)`: write Deck, Note and Card data to user's local storage.
+   - `static void save(Context context, ArrayList<NoteType> typeList, ArrayList<Deck> deckList)`: write all data to user's local storage.
