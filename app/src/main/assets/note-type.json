@@ -1,0 +1,38 @@
+[
+  {
+    "id": "1",
+    "name": "Basic",
+    "fieldList": [
+      "front",
+      "back",
+      "page"
+    ],
+    "templateList": [
+      {
+        "templateFront": "Front: {{front}}. Page: {{page}}",
+        "templateBack": "Back: {{back}}",
+        "styling": ".card { color: red; };"
+      },
+      {
+        "templateFront": "{{front}}",
+        "templateBack": "{{back}}",
+        "styling": ".card { color: blue; };"
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "name": "Basic 2",
+    "fieldList": [
+      "front",
+      "back"
+    ],
+    "templateList": [
+      {
+        "templateFront": "Front: {{front}}",
+        "templateBack": "Back: {{back}}",
+        "styling": ".card { color: red; };"
+      }
+    ]
+  }
+]
