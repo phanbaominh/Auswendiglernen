@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity
     public static ArrayList<Deck> deckArrayList;
     public static ArrayList<NoteType> noteTypesArrayList;
     public static ArrayList<Note> allNoteArrayList;
+    private static boolean isInit = true;
 
     private final int IMPORT_REQUEST_CODE = 69;
     private final int EXPORT_REQUEST_CODE = 420;
@@ -57,8 +58,10 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setUpData();
-
+        if (isInit) {
+            setUpData();
+            isInit=false;
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
