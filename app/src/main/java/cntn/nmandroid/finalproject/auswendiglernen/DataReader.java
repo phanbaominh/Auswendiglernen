@@ -16,63 +16,54 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DataReader {
-    private static Pair<ArrayList<NoteType>, ArrayList<Deck>> load(
-            InputStream typeInputStream,
-            InputStream deckInputStream)
-            throws IOException {
+    private static Pair<ArrayList<NoteType>, ArrayList<Deck>> load(InputStream inputStream) throws IOException {
+        ArrayList<NoteType> typeList = null;
+        ArrayList<Deck> deckList = null;
 
-        JsonReader typeReader = new JsonReader(new InputStreamReader(typeInputStream));
-        JsonReader deckReader = new JsonReader(new InputStreamReader(deckInputStream));
-
-        ArrayList<NoteType> noteTypeList = NoteType.parseList(typeReader);
-
-        // Create hash map for fast reference from ID to NoteType
+        // Hash map for fast reference from ID to NoteType
         Map<String, NoteType> typeIdMap = new HashMap<>();
-        for (NoteType type : noteTypeList) {
-            typeIdMap.put(type.getId(), type);
+
+        JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
+        reader.beginObject();
+        while (reader.hasNext()) {
+            String name = reader.nextName();
+            switch (name) {
+                case "typeList":
+                    typeList = NoteType.parseList(reader);
+                    // Initialise typeIdMap
+                    for (NoteType type : typeList) {
+                        typeIdMap.put(type.getId(), type);
+                    }
+                    break;
+                case "deckList":
+                    deckList = Deck.parseList(reader, typeIdMap);
+                    break;
+                default:
+                    reader.skipValue();
+                    break;
+            }
         }
+        reader.endObject();
 
-        ArrayList<Deck> deckList = Deck.parseList(deckReader, typeIdMap);
-
-        return new Pair<>(noteTypeList, deckList);
+        return new Pair<>(typeList, deckList);
     }
 
-    static Pair<ArrayList<NoteType>, ArrayList<Deck>> initApp(Context context) throws IOException {
+    static Pair<ArrayList<NoteType>, ArrayList<Deck>> initialiseApp(Context context) throws IOException {
         AssetManager manager = context.getAssets();
-        InputStream typeStream;
+        InputStream inputStream;
         try {
             // Use local file
-            typeStream = context.openFileInput("note-type.json");
+            inputStream = context.openFileInput("data.json");
         } catch (FileNotFoundException e) {
             // If local file does not exist, use default file
-            typeStream = manager.open("note-type.json");
+            inputStream = manager.open("default.json");
         }
 
-        InputStream deckStream;
-        try {
-            deckStream = context.openFileInput("deck.json");
-        } catch (FileNotFoundException e) {
-            deckStream = manager.open("deck.json");
-        }
-
-        return load(typeStream, deckStream);
+        return load(inputStream);
     }
 
-    static ArrayList<NoteType> loadNoteTypeFromFile(File f) throws IOException {
+    static Pair<ArrayList<NoteType>, ArrayList<Deck>> loadDataFromFile(File f) throws IOException {
         FileInputStream inputStream = new FileInputStream(f);
-        JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
-        return NoteType.parseList(reader);
-    }
-
-    static ArrayList<Deck> loadDeckFromFile(File f, ArrayList<NoteType> typeList) throws IOException {
-        // Create hash map for fast reference from ID to NoteType
-        Map<String, NoteType> typeIdMap = new HashMap<>();
-        for (NoteType type : typeList) {
-            typeIdMap.put(type.getId(), type);
-        }
-
-        FileInputStream inputStream = new FileInputStream(f);
-        JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
-        return Deck.parseList(reader, typeIdMap);
+        return load(inputStream);
     }
 }

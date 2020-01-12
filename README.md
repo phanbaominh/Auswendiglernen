@@ -76,150 +76,141 @@ In the following parts, I will use `X[]` to refer to `ArrayList<X>`, where `X` i
 
 ## Summary
 
-Everything is stored within 2 files: `note-type.json` and `deck.json`, where:
+Everything is stored within 1 file: `default.json` or `data.json`.
 
-- `note-type.json`: stores data about NoteType and CardTemplate.
-- `deck.json`: stores data about Deck, Note and Card.
+- `default.json` is the default data.
 
-The app's assets will contain 2 instance of `note-type.json` and `deck.json`. These 2 are the default data for users that have just installed the app.
-
-For users that have used the app (creating NoteType, creating Note, etc, basically modifying the default data), the local data for the app on users' machines will contain 2 instance of `note-type.json` and `deck.json`. These 2 are the current user's data and can be exported to other users.
+- `data.json` is the current user's data.
 
 ## Structure
 
-Structure of the 2 files are as follows:
+Structure of the 2 files is the same and is as follows:
 
-1. `note-type.json`
-
-   ```
-   [
-      {
-         "id": "1",
-         "name": "Basic",
-         "fieldList": [
-            "front",
-            "back",
-            "page"
-         ],
-         "templateList": [
+```
+{
+  "typeList": [
+    {
+      "id": "1",
+      "name": "Basic",
+      "fieldList": [
+        "front",
+        "back",
+        "page"
+      ],
+      "templateList": [
+        {
+          "templateFront": "Front: {{front}}. Page: {{page}}",
+          "templateBack": "Back: {{back}}",
+          "styling": ".card { color: red; };"
+        },
+        {
+          "templateFront": "{{front}}",
+          "templateBack": "{{back}}",
+          "styling": ".card { color: blue; };"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Basic 2",
+      "fieldList": [
+        "front",
+        "back"
+      ],
+      "templateList": [
+        {
+          "templateFront": "Front: {{front}}",
+          "templateBack": "Back: {{back}}",
+          "styling": ".card { color: red; };"
+        }
+      ]
+    }
+  ],
+  "deckList": [
+    {
+      "name": "Deck #1",
+      "noteList": [
+        {
+          "noteTypeId": "1",
+          "valueList": [
+            "front value",
+            "back value",
+            "page number"
+          ],
+          "cardList": [
             {
-               "templateFront": "Front: {{front}}. Page: {{page}}",
-               "templateBack": "Back: {{back}}",
-               "styling": ".card { color: red; };"
+              "attr": "attr 1"
             },
             {
-               "templateFront": "{{front}}",
-               "templateBack": "{{back}}",
-               "styling": ".card { color: blue; };"
+              "attr": "attr 2"
             }
-         ]
-      },
-      {
-         "id": "2",
-         "name": "Basic 2",
-         "fieldList": [
-            "front",
-            "back"
-         ],
-         "templateList": [
+          ]
+        },
+        {
+          "noteTypeId": "2",
+          "valueList": [
+            "front value",
+            "back value"
+          ],
+          "cardList": [
             {
-               "templateFront": "Front: {{front}}",
-               "templateBack": "Back: {{back}}",
-               "styling": ".card { color: red; };"
+              "attr": "attr 1"
             }
-         ]
-      }
-   ]
-   ```
-
-2. `deck.json`
-   ```
-   [
-      {
-         "name": "Deck #1",
-         "noteList": [
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Deck #2",
+      "noteList": [
+        {
+          "noteTypeId": "1",
+          "valueList": [
+            "front value 123",
+            "back value 123",
+            "page number 123"
+          ],
+          "cardList": [
             {
-               "noteTypeId": "1",
-               "valueList": [
-                  "front value",
-                  "back value",
-                  "page number"
-               ],
-               "cardList": [
-                  {
-                     "attr": "attr 1"
-                  },
-                  {
-                     "attr": "attr 2"
-                  }
-               ]
+              "attr": "attr 1"
             },
             {
-               "noteTypeId": "2",
-               "valueList": [
-                  "front value",
-                  "back value"
-               ],
-               "cardList": [
-                  {
-                     "attr": "attr 1"
-                  }
-               ]
+              "attr": "attr 2"
             }
-         ]
-      },
-      {
-         "name": "Deck #2",
-         "noteList": [
+          ]
+        },
+        {
+          "noteTypeId": "2",
+          "valueList": [
+            "front value 123",
+            "back value 123"
+          ],
+          "cardList": [
             {
-               "noteTypeId": "1",
-               "valueList": [
-                  "front value 123",
-                  "back value 123",
-                  "page number 123"
-               ],
-               "cardList": [
-                  {
-                     "attr": "attr 1"
-                  },
-                  {
-                     "attr": "attr 2"
-                  }
-               ]
-            },
-            {
-               "noteTypeId": "2",
-               "valueList": [
-                  "front value 123",
-                  "back value 123"
-               ],
-               "cardList": [
-                  {
-                     "attr": "attr 1"
-                  }
-               ]
+              "attr": "attr 1"
             }
-         ]
-      }
-   ]
-   ```
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
 
 ## Notes
 
-In `deck.json`, Cards are represented only by `attr` (which is a placeholder for actual value such as `learningState` or `dueTime`). The other attributes (`htmlFront`, `htmlBack`, `css`) are generated everytime they are called.
+Cards are represented only by `attr` (which is a placeholder for actual value such as `learningState` or `dueTime`). The other attributes (`htmlFront`, `htmlBack`, `css`) are generated everytime they are called.
 
 ## Methods
 
 1. DataReader
 
-   - `static Pair<ArrayList<NoteType>, ArrayList<Deck>> initApp(Context context)`: load user's data in fashion defined in [Summary](#summary)
+   - `static Pair<ArrayList<NoteType>, ArrayList<Deck>> initialiseApp(Context context)`: load user's data in the fashion defined in [Summary](#summary)
 
-   - `static ArrayList<NoteType> loadNoteTypeFromFile(File f)`: load NoteType and CardTemplate data from File.
+   - `static Pair<ArrayList<NoteType>, ArrayList<Deck>> loadDataFromFile(File f)`: load data from File.
 
-   - `static ArrayList<Deck> loadDeckFromFile(File f, ArrayList<NoteType> typeList)`: load Deck data from File. This method requires a `NoteType[]` for reference to parse NoteType from `noteTypeId`.
+2. DataWriter
 
-2) DataWriter
+   - `static void export(File f, ArrayList<NoteType> typeList, ArrayList<Deck> deckList)`: export all data to a File.
 
-   - `static void writeType(ArrayList<NoteType> typeList, Context context)`: write NoteType and CardTemplate data to user's local storage.
-
-   - `static void writeDeck(ArrayList<Deck> deckList, Context context)`: write Deck, Note and Card data to user's local storage.
+   - `static void save(Context context, ArrayList<NoteType> typeList, ArrayList<Deck> deckList)`: write all data to user's local storage.
