@@ -125,7 +125,9 @@ public class CardBrowserActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.actionbar_item_search_card_browser:
                 break;
-            case R.id.actionbar_item_note_types:
+            case R.id.actionbar_item_add_card_browser:
+                Intent intent = new Intent(CardBrowserActivity.this, AddNoteActivity.class);
+                startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);

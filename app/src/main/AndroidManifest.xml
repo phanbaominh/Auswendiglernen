@@ -18,6 +18,7 @@
         </activity>
         <activity android:name=".CardBrowserActivity"></activity>
         <activity android:name=".NoteTypeActivity"></activity>
+        <activity android:name=".AddNoteActivity"></activity>
     </application>
 
 </manifest>
