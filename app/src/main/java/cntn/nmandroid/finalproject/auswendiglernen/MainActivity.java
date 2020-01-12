@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView nagivationView;
+
     public static Pair<ArrayList<NoteType>, ArrayList<Deck>> dataPair;
     public static ArrayList<Deck> deckArrayList;
     public static ArrayList<NoteType> noteTypesArrayList;
@@ -266,11 +267,19 @@ public class MainActivity extends AppCompatActivity
     }
     public static Deck getDeckWithName(String name){
         for (Deck deck: MainActivity.deckArrayList){
-            if (deck.getName() == name){
+            Log.d("compare", "getDeckWithName: " + deck.getName() + name);
+            if (deck.getName().equals(name)){
                 return deck;
             }
         }
         return null;
+    }
+    public static String[] getNoteTypeListName(){
+        ArrayList<String> strs = new ArrayList<String>();
+        for(NoteType noteType : noteTypesArrayList) {
+            strs.add(noteType.getName());
+        }
+        return strs.toArray(new String[strs.size()]);
     }
     public static void createAllNoteArrayList(){
         allNoteArrayList.clear();

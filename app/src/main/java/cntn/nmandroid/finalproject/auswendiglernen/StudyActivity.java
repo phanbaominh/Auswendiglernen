@@ -2,6 +2,7 @@ package cntn.nmandroid.finalproject.auswendiglernen;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,28 +27,44 @@ import java.util.ArrayList;
 public class StudyActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
-    ViewSwitcher viewSwitcher;
-    Intent intentMain;
+    private ViewSwitcher viewSwitcher;
+    private NavigationView nagivationView;
+    private Intent intentMain;
+
+    private Deck deck;
+    private ArrayList<Card> cardArrayList;
+    private int index;
     final String mimeType = "text/html";
     final String encoding = "UTF-8";
-    String questionHtml;
-    String anwserHtml;
-    private NavigationView nagivationView;
+    private String questionHtml;
+    private String answerHtml;
+    private String css;
+    private String deckName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_study);
         intentMain = getIntent();
+        deckName = intentMain.getStringExtra("deckName");
 
         Toolbar toolbar = findViewById(R.id.toolbar_study);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         createNavigationDrawer();
 
-        questionHtml = "\"<br /><br />Read the handouts please for tomorrow.<br /><br /><!--homework help homework\" +\n" +
-                "                \"help help with homework homework assignments elementary school high school middle school\" +\n" +
-                "                \"// --><font color='#60c000' size='4'><strong>Please!</strong></font>\"";
-        changeWebViewContent(R.id.webview_question_study,questionHtml);
+        deck = MainActivity.getDeckWithName(deckName);
+
+        cardArrayList = new ArrayList<>(deck.getCardList());
+        index = 0;
+
+        if (index >= cardArrayList.size()) {
+            finishDeck();
+        }
+
+        updateQuestionHtml(index);
+        changeWebViewContent(R.id.webview_question_study, questionHtml);
+        changeWebViewContent(R.id.webview_question_answer_study,questionHtml);
         viewSwitcher=findViewById(R.id.viewswitcher_study);
 
 
@@ -92,7 +109,7 @@ public class StudyActivity extends AppCompatActivity {
         MenuInflater menuInflater = this.getMenuInflater();
         menuInflater.inflate(R.menu.actionbar_study, menu);
         TextView textView = findViewById(R.id.textview_deck_name_actionbar);
-        textView.setText(intentMain.getStringExtra("deckName"));
+        textView.setText(deckName);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -109,29 +126,51 @@ public class StudyActivity extends AppCompatActivity {
 
     public void onClickShowAnswer(View view) {
         viewSwitcher.showNext();
-        anwserHtml = "\"<br /><br />Read the handouts please for tomorrow.<br /><br /><!--homework help homework\" +\n" +
-                "                \"help help with homework homework assignments elementary school high school middle school\" +\n" +
-                "                \"// --><font color='#60c000' size='4'><strong>Please!</strong></font>\"";
-        changeWebViewContent(R.id.webview_answer_study,anwserHtml);
-        changeWebViewContent(R.id.webview_question_anwser_study,questionHtml);
-    }
-    private void hideAnwser(){
-        viewSwitcher.showNext();
-        changeWebViewContent(R.id.webview_question_study,questionHtml);
-    }
-    public void onClickAgain(View view) {
-        hideAnwser();
-    }
+        updateAnswerHtml(index);
+        changeWebViewContent(R.id.webview_answer_study,answerHtml);
 
-    public void onClickGood(View view) {
-        hideAnwser();
     }
+    private void changeQuestion(){
 
-    public void onClickEasy(View view) {
-        hideAnwser();
+
+        if (++index < cardArrayList.size()) {
+            viewSwitcher.showNext();
+            updateQuestionHtml(index);
+            changeWebViewContent(R.id.webview_question_study, questionHtml);
+            changeWebViewContent(R.id.webview_question_answer_study, questionHtml);
+        }
+        else{
+            finishDeck();
+        }
+    }
+    private void updateQuestionHtml(int i){
+        questionHtml = cardArrayList.get(i).htmlFront;
+        css = "<style>" + cardArrayList.get(i).css + "</style>";
+        questionHtml = css + questionHtml;
+    }
+    private void updateAnswerHtml(int i){
+        answerHtml = cardArrayList.get(i).htmlBack;
+        css = "<style>" + cardArrayList.get(i).css + "</style>";
+        answerHtml = css + answerHtml;
     }
     private void changeWebViewContent(int id, String html){
         WebView webView = findViewById(id);
         webView.loadDataWithBaseURL("",html,mimeType,encoding,"");
     }
+    private void finishDeck(){
+        Intent intent = new Intent(StudyActivity.this,MainActivity.class);
+        startActivity(intent);
+    }
+    public void onClickAgain(View view) {
+        changeQuestion();
+    }
+
+    public void onClickGood(View view) {
+        changeQuestion();
+    }
+
+    public void onClickEasy(View view) {
+        changeQuestion();
+    }
+
 }

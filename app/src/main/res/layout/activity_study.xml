@@ -39,7 +39,7 @@
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/button_show_anwser_study"
+                    android:id="@+id/button_show_answer_study"
                     android:layout_gravity="bottom"
                     android:text="Show Answer"
                     android:background="@android:color/darker_gray"
@@ -54,7 +54,7 @@
                 <WebView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/webview_question_anwser_study"
+                    android:id="@+id/webview_question_answer_study"
                     android:layout_weight="1"
                     />
                 <WebView

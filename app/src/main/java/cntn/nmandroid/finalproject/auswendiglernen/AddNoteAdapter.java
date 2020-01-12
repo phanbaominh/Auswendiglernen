@@ -15,11 +15,11 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-public class AddNoteAdapter extends ArrayAdapter<Data> {
+public class AddNoteAdapter extends ArrayAdapter<String> {
     private Context context;
 
-    public AddNoteAdapter(Context context, ArrayList<Data> dataArrayList) {
-        super(context, 0, dataArrayList);
+    public AddNoteAdapter(Context context, ArrayList<String> stringArrayList) {
+        super(context, 0, stringArrayList);
         this.context = context;
     }
 
@@ -28,17 +28,17 @@ public class AddNoteAdapter extends ArrayAdapter<Data> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         convertView = createViewWithLayout(R.layout.listview_item_add_note);
 
-        Data data = getItem(position);
-        linkData(data, convertView, position);
+        String string = getItem(position);
+        linkString(string, convertView, position);
 
         return convertView;
     }
 
-    private void linkData(Data data, final View view,final int pos) {
+    private void linkString(String string, final View view,final int pos) {
 
         TextView textViewField = view.findViewById(R.id.textview_listview_field_add_note);
         EditText editText = view.findViewById(R.id.edittext_listview_field_value_add_note);
-        textViewField.setText(data.getText());
+        textViewField.setText(string);
         ImageButton button = view.findViewById(R.id.button_listview_attach_media_add_note);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
