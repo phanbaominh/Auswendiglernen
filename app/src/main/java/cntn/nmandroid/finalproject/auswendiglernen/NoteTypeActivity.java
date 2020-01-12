@@ -88,10 +88,10 @@ public class NoteTypeActivity extends AppCompatActivity
             ListView listView = (ListView) v;
             AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) menuInfo;
 
-            Data obj = (Data) listView.getItemAtPosition(acmi.position);
+            NoteType obj = (NoteType) listView.getItemAtPosition(acmi.position);
             MenuItem item = menu.findItem(R.id.context_menu_item_title_note_types);
 
-            SpannableString s = new SpannableString(obj.getText());
+            SpannableString s = new SpannableString(obj.getName());
             s.setSpan(new ForegroundColorSpan(Color.RED), 0, s.length(), 0);
             item.setTitle(s);
         }
