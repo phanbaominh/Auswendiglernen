@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.DialogFragment;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -22,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationView;
@@ -246,6 +248,25 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         // User touched the dialog's positive button
+        Dialog dialogView = dialog.getDialog();
+        EditText et = dialogView.findViewById(R.id.edittext_name_dialog);
+        Log.d("debug_add_deck", et.getText().toString());
+
+        // find notetype
+        NoteType baseNoteType = null;
+        for(Deck deck : MainActivity.deckArrayList) {
+
+            // if exists, do nothing
+            if (deck.getName().equals(et.getText().toString())){
+                return ;
+            }
+
+        }
+        Deck newDeck = new Deck();
+        newDeck.setName(et.getText().toString());
+        // add it
+        MainActivity.deckArrayList.add(newDeck);
+        dataAdapter.notifyDataSetChanged();
     }
 
     @Override
