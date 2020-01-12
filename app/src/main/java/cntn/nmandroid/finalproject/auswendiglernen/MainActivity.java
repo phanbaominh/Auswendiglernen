@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.DialogFragment;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -23,7 +24,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+            implements NameDialogFragment.NameDialogListener{
     public static DataAdapter dataAdapter;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
@@ -146,6 +148,29 @@ public class MainActivity extends AppCompatActivity {
                 return super.onContextItemSelected(item);
         }
     }
+    public void showNameDialog() {
+        // Create an instance of the dialog fragment and show it
+        DialogFragment dialog = new NameDialogFragment();
+        dialog.show(getSupportFragmentManager(), "NameDialogFragment");
 
+
+    }
+
+    // The dialog fragment receives a reference to this Activity through the
+    // Fragment.onAttach() callback, which it uses to call the following methods
+    // defined by the NoticeDialogFragment.NoticeDialogListener interface
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        // User touched the dialog's positive button
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        // User touched the dialog's negative button
+    }
+
+    public void onClickFABAddDeck(View view) {
+        showNameDialog();
+    }
 }
 

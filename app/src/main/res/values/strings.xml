@@ -5,4 +5,5 @@
     <string name="dialog_title_note_types">Choose Note Types</string>
     <string name="dialog_ok">Ok</string>
     <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_title_name">Enter name</string>
 </resources>

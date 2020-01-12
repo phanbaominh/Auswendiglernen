@@ -5,6 +5,6 @@
         android:id="@+id/actionbar_item_add_note_types"
         android:title="Add Note Types"
         app:showAsAction="ifRoom"
-        android:icon="@android:drawable/ic_menu_add"
+        android:icon="@android:drawable/ic_input_add"
         />
 </menu>

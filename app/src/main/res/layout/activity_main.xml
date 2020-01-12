@@ -35,6 +35,8 @@
                 android:layout_gravity="bottom|right"
                 android:layout_margin="16dp"
                 android:backgroundTint="@color/colorPrimaryDark"
+                android:src="@android:drawable/ic_input_add"
+                android:onClick="onClickFABAddDeck"
                 />
         </LinearLayout>
     </LinearLayout>
