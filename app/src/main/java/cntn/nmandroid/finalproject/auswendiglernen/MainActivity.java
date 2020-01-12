@@ -46,8 +46,8 @@ public class MainActivity extends AppCompatActivity
     private void createListView(){
         dataArrayList = new ArrayList<>();
         dataAdapter = new DataAdapter(this, dataArrayList);
-        dataArrayList.add(new Data("Gay"));
-        dataArrayList.add(new Data("Haha"));
+        dataArrayList.add(new Data("Data 1"));
+        dataArrayList.add(new Data("Data 2"));
         ListView listView = findViewById(R.id.listview_main);
         listView.setAdapter(dataAdapter);
 
@@ -56,7 +56,9 @@ public class MainActivity extends AppCompatActivity
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
+                Intent intent = new Intent(MainActivity.this, StudyActivity.class);
+                intent.putExtra("deckName",dataArrayList.get(position).getText());
+                startActivity(intent);
             }
         });
     }

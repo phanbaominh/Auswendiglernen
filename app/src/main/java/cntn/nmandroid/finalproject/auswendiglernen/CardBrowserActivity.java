@@ -38,6 +38,9 @@ public class CardBrowserActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar_card_browser);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         createSortOptions();
         createNavigationDrawer();
@@ -140,9 +143,7 @@ public class CardBrowserActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(false);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
 
         nagivationView = (NavigationView)findViewById(R.id.navview_card_browser);
         nagivationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -172,11 +173,10 @@ public class CardBrowserActivity extends AppCompatActivity {
         Spinner spinDeck = findViewById(R.id.spinner_actionbar_card_browser);
         String[] questionItems = {"Question"};
         String[] typeItems = {"Answer"};
-        String[] deckItems={"Gay lord phan bao minh hahahahahhhhhhhhhhhhhhhhhh"};
 
         createSpinner(spinQuestion,questionItems);
         createSpinner(spinType,typeItems);
-        createSpinner(spinDeck,deckItems);
+        createSpinner(spinDeck,convertToString());
 
         spinType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -201,6 +201,13 @@ public class CardBrowserActivity extends AppCompatActivity {
 
             }
         });
+    }
+    private String[] convertToString(){
+        ArrayList<String> strs = new ArrayList<String>();
+        for(Data data : MainActivity.dataArrayList) {
+            strs.add(data.getText());
+        }
+        return strs.toArray(new String[strs.size()]);
     }
     private void createSpinner(Spinner spinner,String[] items){
 

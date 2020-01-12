@@ -19,6 +19,7 @@
         <activity android:name=".CardBrowserActivity"></activity>
         <activity android:name=".NoteTypeActivity"></activity>
         <activity android:name=".AddNoteActivity"></activity>
+        <activity android:name=".StudyActivity"></activity>
     </application>
-
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 </manifest>
