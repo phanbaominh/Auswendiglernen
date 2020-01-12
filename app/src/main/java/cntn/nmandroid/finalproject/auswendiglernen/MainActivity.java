@@ -12,6 +12,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
+import android.util.Pair;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,19 +24,26 @@ import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
             implements NameDialogFragment.NameDialogListener{
-    public static DataAdapter dataAdapter;
+    public static DeckAdapter dataAdapter;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView nagivationView;
-    public static ArrayList<Data> dataArrayList;
+    public static Pair<ArrayList<NoteType>, ArrayList<Deck>> dataPair;
+    public static ArrayList<Deck> deckArrayList;
+    public static ArrayList<NoteType> noteTypesArrayList;
+    public static ArrayList<Note> allNoteArrayList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        setUpData();
+
 
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
@@ -43,11 +52,24 @@ public class MainActivity extends AppCompatActivity
 
 
     }
+
+    private void setUpData() {
+        try {
+            dataPair = DataReader.initialiseApp(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        deckArrayList = dataPair.second;
+        noteTypesArrayList = dataPair.first;
+        allNoteArrayList = new ArrayList<Note>();
+        createAllNoteArrayList();
+        Log.d("allnotearray", "createAllNoteArrayList: " + allNoteArrayList.toString());
+    }
+
     private void createListView(){
-        dataArrayList = new ArrayList<>();
-        dataAdapter = new DataAdapter(this, dataArrayList);
-        dataArrayList.add(new Data("Data 1"));
-        dataArrayList.add(new Data("Data 2"));
+
+        dataAdapter = new DeckAdapter(this, deckArrayList);
         ListView listView = findViewById(R.id.listview_main);
         listView.setAdapter(dataAdapter);
 
@@ -57,7 +79,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Intent intent = new Intent(MainActivity.this, StudyActivity.class);
-                intent.putExtra("deckName",dataArrayList.get(position).getText());
+                intent.putExtra("deckName",deckArrayList.get(position).getName());
                 startActivity(intent);
             }
         });
@@ -173,6 +195,30 @@ public class MainActivity extends AppCompatActivity
 
     public void onClickFABAddDeck(View view) {
         showNameDialog();
+    }
+
+    public static String[] getDeckListName(){
+        ArrayList<String> strs = new ArrayList<String>();
+        strs.add("All Decks");
+        for(Deck deck : MainActivity.deckArrayList) {
+            strs.add(deck.getName());
+        }
+        return strs.toArray(new String[strs.size()]);
+    }
+    public static Deck getDeckWithName(String name){
+        for (Deck deck: MainActivity.deckArrayList){
+            if (deck.getName() == name){
+                return deck;
+            }
+        }
+        return null;
+    }
+    public static void createAllNoteArrayList(){
+        allNoteArrayList.clear();
+        for (Deck deck: deckArrayList){
+            allNoteArrayList.addAll(deck.getNoteList());
+        }
+
     }
 }
 

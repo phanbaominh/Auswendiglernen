@@ -13,11 +13,11 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-public class DataAdapter extends ArrayAdapter<Data> {
+public class DeckAdapter extends ArrayAdapter<Deck> {
     private Context context;
 
-    public DataAdapter(Context context, ArrayList<Data> dataArrayList) {
-        super(context, 0, dataArrayList);
+    public DeckAdapter(Context context, ArrayList<Deck> deckArrayList) {
+        super(context, 0, deckArrayList);
         this.context = context;
     }
 
@@ -26,16 +26,16 @@ public class DataAdapter extends ArrayAdapter<Data> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         convertView = createViewWithLayout(R.layout.listview_item_main);
 
-        Data data = getItem(position);
-        linkData(data, convertView, position);
+        Deck deck = getItem(position);
+        linkDeck(deck, convertView, position);
 
         return convertView;
     }
 
-    private void linkData(Data data, final View view,final int pos) {
+    private void linkDeck(Deck deck, final View view,final int pos) {
 
         TextView textViewTitle = view.findViewById(R.id.textview_listview_item_main);
-        textViewTitle.setText(data.getText());
+        textViewTitle.setText(deck.getName());
 
     }
     private View createViewWithLayout(int layoutID) {

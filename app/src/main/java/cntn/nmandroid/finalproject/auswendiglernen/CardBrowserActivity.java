@@ -3,6 +3,7 @@ package cntn.nmandroid.finalproject.auswendiglernen;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,10 +32,13 @@ public class CardBrowserActivity extends AppCompatActivity {
     private ActionBarDrawerToggle toggle;
     private NavigationView nagivationView;
     //public static ArrayList<Data> dataArrayList;
+    private ArrayList<Note> noteArrayList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_browser);
+
+        noteArrayList = new ArrayList<>();
 
         Toolbar toolbar = findViewById(R.id.toolbar_card_browser);
         setSupportActionBar(toolbar);
@@ -45,11 +49,11 @@ public class CardBrowserActivity extends AppCompatActivity {
         createSortOptions();
         createNavigationDrawer();
         createListView();
+
     }
 
     private void createListView(){
-        dataAdapter = new CardBrowserAdapter(this,MainActivity.dataArrayList);
-
+        dataAdapter = new CardBrowserAdapter(CardBrowserActivity.this,new ArrayList<>(MainActivity.allNoteArrayList));
         ListView listView = findViewById(R.id.listview_card_browser);
         listView.setAdapter(dataAdapter);
 
@@ -170,13 +174,13 @@ public class CardBrowserActivity extends AppCompatActivity {
     private void createSortOptions(){
         Spinner spinQuestion = findViewById(R.id.spinner_question_card_browser);
         Spinner spinType = findViewById(R.id.spinner_type_card_browser);
-        Spinner spinDeck = findViewById(R.id.spinner_actionbar_card_browser);
+        final Spinner spinDeck = findViewById(R.id.spinner_actionbar_card_browser);
         String[] questionItems = {"Question"};
         String[] typeItems = {"Answer"};
 
         createSpinner(spinQuestion,questionItems);
         createSpinner(spinType,typeItems);
-        createSpinner(spinDeck,convertToString());
+        createSpinner(spinDeck,MainActivity.getDeckListName());
 
         spinType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -193,7 +197,25 @@ public class CardBrowserActivity extends AppCompatActivity {
         spinDeck.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position != 0) {
+                    noteArrayList.clear();
+                    noteArrayList.addAll(MainActivity.getDeckWithName(spinDeck.getSelectedItem().toString()).getNoteList());
+                    dataAdapter.clear();
+                    dataAdapter.addAll(noteArrayList);
+                }
+                else
+                {
+                    if (dataAdapter != null) {
+                        dataAdapter.clear();
+                        dataAdapter.addAll(MainActivity.allNoteArrayList);
+                    }
+                    else {
 
+                    }
+
+                }
+
+                dataAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -202,13 +224,7 @@ public class CardBrowserActivity extends AppCompatActivity {
             }
         });
     }
-    private String[] convertToString(){
-        ArrayList<String> strs = new ArrayList<String>();
-        for(Data data : MainActivity.dataArrayList) {
-            strs.add(data.getText());
-        }
-        return strs.toArray(new String[strs.size()]);
-    }
+
     private void createSpinner(Spinner spinner,String[] items){
 
         ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item,items);

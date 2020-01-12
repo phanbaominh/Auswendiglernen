@@ -10,22 +10,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-
-import java.util.ArrayList;
 
 public class NoteTypeActivity extends AppCompatActivity
         implements AddNoteTypesDialogFragment.AddNoteTypesDialogListener {
-    private NoteTypeAdapter dataAdapter;
+    private NoteTypeAdapter noteTypeAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,13 +39,13 @@ public class NoteTypeActivity extends AppCompatActivity
 
     private void createListView(){
         //dataArrayList = new ArrayList<>();
-        dataAdapter = new NoteTypeAdapter(this, MainActivity.dataArrayList);
+        noteTypeAdapter = new NoteTypeAdapter(this, MainActivity.noteTypesArrayList);
        // dataArrayList.add(new Data("Gay"));
 
         ListView listView = findViewById(R.id.listview_note_types);
         registerForContextMenu(listView);
 
-        listView.setAdapter(dataAdapter);
+        listView.setAdapter(noteTypeAdapter);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

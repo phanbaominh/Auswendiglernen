@@ -76,8 +76,8 @@ public class AddNoteTypesDialogFragment extends DialogFragment {
     }
     private ArrayList<String> convertToString(){
         ArrayList<String> strs = new ArrayList<String>();
-        for(Data data : MainActivity.dataArrayList) {
-            strs.add(data.getText());
+        for(NoteType noteType : MainActivity.noteTypesArrayList) {
+            strs.add(noteType.getName());
         }
         return strs;
     }

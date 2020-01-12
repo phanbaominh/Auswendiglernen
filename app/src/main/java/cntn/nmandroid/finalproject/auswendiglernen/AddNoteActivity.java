@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 public class AddNoteActivity extends AppCompatActivity {
     private AddNoteAdapter dataAdapter;
+    private ArrayList<Data> dataArrayList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +38,9 @@ public class AddNoteActivity extends AppCompatActivity {
 
     private void createListView(){
         //dataArrayList = new ArrayList<>();
-        dataAdapter = new AddNoteAdapter(this, MainActivity.dataArrayList);
+        dataArrayList = new ArrayList<>();
+        dataArrayList.add( new Data("Data 1"));
+        dataAdapter = new AddNoteAdapter(this, dataArrayList);
         // dataArrayList.add(new Data("Gay"));
 
         ListView listView = findViewById(R.id.listview_add_note);
@@ -78,7 +81,7 @@ public class AddNoteActivity extends AppCompatActivity {
 
     private ArrayList<String> convertToString(){
         ArrayList<String> strs = new ArrayList<String>();
-        for(Data data : MainActivity.dataArrayList) {
+        for(Data data : dataArrayList) {
             strs.add(data.getText());
         }
         return strs;

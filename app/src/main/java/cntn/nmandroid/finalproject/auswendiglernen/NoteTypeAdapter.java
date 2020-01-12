@@ -12,11 +12,11 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-public class NoteTypeAdapter extends ArrayAdapter<Data> {
+public class NoteTypeAdapter extends ArrayAdapter<NoteType> {
     private Context context;
 
-    public NoteTypeAdapter(Context context, ArrayList<Data> dataArrayList) {
-        super(context, 0, dataArrayList);
+    public NoteTypeAdapter(Context context, ArrayList<NoteType> noteTypeArrayList) {
+        super(context, 0, noteTypeArrayList);
         this.context = context;
     }
 
@@ -25,17 +25,17 @@ public class NoteTypeAdapter extends ArrayAdapter<Data> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         convertView = createViewWithLayout(R.layout.listview_item_note_types);
 
-        Data data = getItem(position);
-        linkData(data, convertView, position);
+        NoteType noteType = getItem(position);
+        linkNoteType(noteType, convertView, position);
 
         return convertView;
     }
 
-    private void linkData(Data data, final View view,final int pos) {
+    private void linkNoteType(NoteType noteType, final View view,final int pos) {
 
         TextView textViewName = view.findViewById(R.id.textview_listview_name_note_types);
         TextView textViewCount = view.findViewById(R.id.textview_listview_count_note_types);
-        textViewName.setText(data.getText());
+        textViewName.setText(noteType.getName());
 
     }
     private View createViewWithLayout(int layoutID) {
