@@ -74,6 +74,8 @@ In the following parts, I will use `X[]` to refer to `ArrayList<X>`, where `X` i
 
 # Storage
 
+## Summary
+
 Everything is stored within 2 files: `note-type.json` and `deck.json`, where:
 
 - `note-type.json`: stores data about NoteType and CardTemplate.
@@ -82,6 +84,8 @@ Everything is stored within 2 files: `note-type.json` and `deck.json`, where:
 The app's assets will contain 2 instance of `note-type.json` and `deck.json`. These 2 are the default data for users that have just installed the app.
 
 For users that have used the app (creating NoteType, creating Note, etc, basically modifying the default data), the local data for the app on users' machines will contain 2 instance of `note-type.json` and `deck.json`. These 2 are the current user's data and can be exported to other users.
+
+## Structure
 
 Structure of the 2 files are as follows:
 
@@ -199,5 +203,23 @@ Structure of the 2 files are as follows:
       }
    ]
    ```
-   ## Notes
-   In `deck.json`, Cards are represented only by `attr` (which is a placeholder for actual value such as `learningState` or `dueTime`). The other attributes (`htmlFront`, `htmlBack`, `css`) are generated everytime they are called.
+
+## Notes
+
+In `deck.json`, Cards are represented only by `attr` (which is a placeholder for actual value such as `learningState` or `dueTime`). The other attributes (`htmlFront`, `htmlBack`, `css`) are generated everytime they are called.
+
+## Methods
+
+1. DataReader
+
+   - `static Pair<ArrayList<NoteType>, ArrayList<Deck>> initApp(Context context)`: load user's data in fashion defined in [Summary](#summary)
+
+   - `static ArrayList<NoteType> loadNoteTypeFromFile(File f)`: load NoteType and CardTemplate data from File.
+
+   - `static ArrayList<Deck> loadDeckFromFile(File f, ArrayList<NoteType> typeList)`: load Deck data from File. This method requires a `NoteType[]` for reference to parse NoteType from `noteTypeId`.
+
+2) DataWriter
+
+   - `static void writeType(ArrayList<NoteType> typeList, Context context)`: write NoteType and CardTemplate data to user's local storage.
+
+   - `static void writeDeck(ArrayList<Deck> deckList, Context context)`: write Deck, Note and Card data to user's local storage.
