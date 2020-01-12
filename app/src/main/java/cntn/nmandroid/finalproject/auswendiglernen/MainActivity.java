@@ -37,13 +37,16 @@ public class MainActivity extends AppCompatActivity
     public static ArrayList<Deck> deckArrayList;
     public static ArrayList<NoteType> noteTypesArrayList;
     public static ArrayList<Note> allNoteArrayList;
+    private  static  boolean isInit = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setUpData();
-
+        if (isInit) {
+            setUpData();
+            isInit=false;
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
