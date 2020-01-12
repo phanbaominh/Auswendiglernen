@@ -19,26 +19,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        loadNoteTypeData();
-    }
-
-    private void loadNoteTypeData() {
-        try {
-            Pair<ArrayList<NoteType>, ArrayList<Deck>> tmp = DataReader.initApp(this);
-            ArrayList<NoteType> typeList = tmp.first;
-            ArrayList<Deck> deckList = tmp.second;
-
-            Deck deck0 = deckList.get(1);
-            Note note0 = deck0.getNoteList().get(0);
-            Card card = note0.getCardList().get(0);
-            TextView textView = findViewById(R.id.testTextView);
-            textView.setText(card.htmlFront);
-
-            DataWriter.writeType(typeList, this);
-            DataWriter.writeDeck(deckList, this);
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-        }
     }
 }

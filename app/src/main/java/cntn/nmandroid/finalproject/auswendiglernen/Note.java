@@ -15,6 +15,12 @@ public class Note {
     private ArrayList<String> valueList;
     private ArrayList<Card> cardList;
 
+    public NoteType getNoteType() {
+        return noteType;
+    }
+    public void setNoteType(NoteType noteType) {
+        this.noteType = noteType;
+    }
     public ArrayList<Card> getCardList() {
         ArrayList<Card> ans = (ArrayList<Card>)this.cardList.clone();
         for (int i = 0; i < noteType.getTemplateList().size(); ++i) {

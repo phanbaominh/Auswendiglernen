@@ -14,6 +14,12 @@ public class Deck {
     private String name;
     private ArrayList<Note> noteList;
 
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
     public ArrayList<Note> getNoteList() {
         return noteList;
     }
