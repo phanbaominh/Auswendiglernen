@@ -27,6 +27,7 @@
             android:layout_weight="1"
             android:gravity="center|bottom"
             android:orientation="vertical" >
+
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/floating_action_button"
                 android:layout_width="wrap_content"
@@ -39,6 +40,8 @@
                 />
         </LinearLayout>
     </LinearLayout>
+
+    <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         app:menu="@menu/navbar_main"
