@@ -62,8 +62,7 @@ public class DataReader {
         return load(inputStream);
     }
 
-    static Pair<ArrayList<NoteType>, ArrayList<Deck>> loadDataFromFile(File f) throws IOException {
-        FileInputStream inputStream = new FileInputStream(f);
+    static Pair<ArrayList<NoteType>, ArrayList<Deck>> importFrom(InputStream inputStream) throws IOException {
         return load(inputStream);
     }
 }

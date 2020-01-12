@@ -207,10 +207,10 @@ Cards are represented only by `attr` (which is a placeholder for actual value su
 
    - `static Pair<ArrayList<NoteType>, ArrayList<Deck>> initialiseApp(Context context)`: load user's data in the fashion defined in [Summary](#summary)
 
-   - `static Pair<ArrayList<NoteType>, ArrayList<Deck>> loadDataFromFile(File f)`: load data from File.
+   - `static Pair<ArrayList<NoteType>, ArrayList<Deck>> importFrom(InputStream inp)`: load data from an input stream. Please remember to close the stream yourself.
 
 2. DataWriter
 
-   - `static void export(File f, ArrayList<NoteType> typeList, ArrayList<Deck> deckList)`: export all data to a File.
+   - `static void exportTo(Outputstream out, ArrayList<NoteType> typeList, ArrayList<Deck> deckList)`: export all data to an OutputStream. Please remember to close the stream yourself.
 
    - `static void save(Context context, ArrayList<NoteType> typeList, ArrayList<Deck> deckList)`: write all data to user's local storage.

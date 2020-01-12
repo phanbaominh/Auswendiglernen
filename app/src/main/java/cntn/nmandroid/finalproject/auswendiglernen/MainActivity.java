@@ -1,13 +1,16 @@
 package cntn.nmandroid.finalproject.auswendiglernen;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.DialogFragment;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -24,7 +27,11 @@ import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
@@ -37,6 +44,11 @@ public class MainActivity extends AppCompatActivity
     public static ArrayList<Deck> deckArrayList;
     public static ArrayList<NoteType> noteTypesArrayList;
     public static ArrayList<Note> allNoteArrayList;
+
+    private final int IMPORT_REQUEST_CODE = 69;
+    private final int EXPORT_REQUEST_CODE = 420;
+    private final int PERMISSION_REQUEST_CODE = 42069;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +62,14 @@ public class MainActivity extends AppCompatActivity
         createNavigationDrawer();
         createListView();
 
+        requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+        requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    }
 
+    private void requestPermission(String permission) {
+        if (checkSelfPermission(permission) == PackageManager.PERMISSION_DENIED) {
+            requestPermissions(new String[] { permission }, PERMISSION_REQUEST_CODE);
+        }
     }
 
     private void setUpData() {
@@ -129,8 +148,14 @@ public class MainActivity extends AppCompatActivity
             return true;
         switch (item.getItemId()) {
             case R.id.actionbar_item_import:
+                Intent importIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                importIntent.setType("*/*");
+                startActivityForResult(importIntent, IMPORT_REQUEST_CODE);
                 break;
             case R.id.actionbar_item_export:
+                Intent exportIntent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                exportIntent.setType("*/*");
+                startActivityForResult(exportIntent, EXPORT_REQUEST_CODE);
                 break;
             case R.id.actionbar_item_note_types:
                 Intent intent = new Intent(MainActivity.this, NoteTypeActivity.class);
@@ -138,6 +163,40 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case IMPORT_REQUEST_CODE:
+                try {
+                    InputStream inputStream = getContentResolver().openInputStream(data.getData());
+                    Pair<ArrayList<NoteType>, ArrayList<Deck>> tmp = DataReader.importFrom(inputStream);
+                    inputStream.close();
+
+                    noteTypesArrayList.clear();
+                    noteTypesArrayList.addAll(tmp.first);
+
+                    deckArrayList.clear();
+                    deckArrayList.addAll(tmp.second);
+
+                    dataAdapter.notifyDataSetChanged();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case EXPORT_REQUEST_CODE:
+                try {
+                    OutputStream outputStream = getContentResolver().openOutputStream(data.getData());
+                    DataWriter.exportTo(outputStream, noteTypesArrayList, deckArrayList);
+                    outputStream.close();
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
+        }
     }
 
     @Override

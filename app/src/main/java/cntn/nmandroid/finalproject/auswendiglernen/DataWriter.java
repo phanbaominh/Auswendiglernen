@@ -31,10 +31,8 @@ public class DataWriter {
         out.write(data.toString().getBytes());
     }
 
-    static void export(File f, ArrayList<NoteType> typeList, ArrayList<Deck> deckList) throws IOException, JSONException {
-        FileOutputStream outputStream = new FileOutputStream(f);
+    static void exportTo(OutputStream outputStream, ArrayList<NoteType> typeList, ArrayList<Deck> deckList) throws IOException, JSONException {
         write(typeList, deckList, outputStream);
-        outputStream.close();
     }
 
     static void save(Context context, ArrayList<NoteType> typeList, ArrayList<Deck> deckList) throws IOException, JSONException {
