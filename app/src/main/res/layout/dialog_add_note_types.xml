@@ -10,7 +10,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/spinner_rename_dialog_note_types"
+        android:id="@+id/rename_dialog_note_types"
         android:text="Note Type Name"
         />
 </LinearLayout>
