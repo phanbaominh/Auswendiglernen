@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/navbar_item_deck_main"
+        android:title="Decks"/>
+    <item android:id="@+id/navbar_item_card_browser_main"
+        android:title="Card Browser"/>
+    <item android:id="@+id/navbar_item_settings_main"
+        android:title="Settings"/>
+
+</menu>
