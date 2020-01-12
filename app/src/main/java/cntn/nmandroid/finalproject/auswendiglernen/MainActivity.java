@@ -288,7 +288,6 @@ public class MainActivity extends AppCompatActivity
     }
     public static Deck getDeckWithName(String name){
         for (Deck deck: MainActivity.deckArrayList){
-            Log.d("compare", "getDeckWithName: " + deck.getName() + name);
             if (deck.getName().equals(name)){
                 return deck;
             }
