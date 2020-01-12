@@ -1,17 +1,22 @@
 package cntn.nmandroid.finalproject.auswendiglernen;
 
 import android.content.Intent;
+import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -117,6 +122,7 @@ public class NoteTypeActivity extends AppCompatActivity
     }
     public void showNoticeDialog() {
         // Create an instance of the dialog fragment and show it
+
         DialogFragment dialog = new AddNoteTypesDialogFragment();
         dialog.show(getSupportFragmentManager(), "AddNoteTypesDialogFragment");
 
@@ -129,6 +135,33 @@ public class NoteTypeActivity extends AppCompatActivity
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         // User touched the dialog's positive button
+        Dialog dialogView = dialog.getDialog();
+        EditText et = dialogView.findViewById(R.id.rename_dialog_note_types);
+        Spinner spin = dialogView.findViewById(R.id.spinner_note_types_dialog_note_types);
+        String base = spin.getSelectedItem().toString();
+        Log.d("debug_add_notetype", et.getText().toString());
+        Log.d("debug_add_notetype", base);
+
+        // find notetype
+        NoteType baseNoteType = null;
+        for(NoteType noteType : MainActivity.noteTypesArrayList) {
+
+            // if exists, do nothing
+            if (noteType.getName().equals(et.getText().toString())){
+                return ;
+            }
+
+            // found
+            if (noteType.getName().equals(base)){
+                baseNoteType = noteType;
+            }
+        }
+        NoteType newNoteType = new NoteType(et.getText().toString(), baseNoteType.getFieldList(), baseNoteType.getTemplateList());
+
+        // add it
+        MainActivity.noteTypesArrayList.add(newNoteType);
+        noteTypeAdapter.notifyDataSetChanged();
+
     }
 
     @Override
