@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.DialogFragment;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -22,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationView;
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity
     public static ArrayList<Deck> deckArrayList;
     public static ArrayList<NoteType> noteTypesArrayList;
     public static ArrayList<Note> allNoteArrayList;
+    private static boolean isInit = true;
 
     private final int IMPORT_REQUEST_CODE = 69;
     private final int EXPORT_REQUEST_CODE = 420;
@@ -55,8 +58,10 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setUpData();
-
+        if (isInit) {
+            setUpData();
+            isInit=false;
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
@@ -172,29 +177,33 @@ public class MainActivity extends AppCompatActivity
 
         switch (requestCode) {
             case IMPORT_REQUEST_CODE:
-                try {
-                    InputStream inputStream = getContentResolver().openInputStream(data.getData());
-                    Pair<ArrayList<NoteType>, ArrayList<Deck>> tmp = DataReader.importFrom(inputStream);
-                    inputStream.close();
+                if (resultCode == RESULT_OK) {
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(data.getData());
+                        Pair<ArrayList<NoteType>, ArrayList<Deck>> tmp = DataReader.importFrom(inputStream);
+                        inputStream.close();
 
-                    noteTypesArrayList.clear();
-                    noteTypesArrayList.addAll(tmp.first);
+                        noteTypesArrayList.clear();
+                        noteTypesArrayList.addAll(tmp.first);
 
-                    deckArrayList.clear();
-                    deckArrayList.addAll(tmp.second);
+                        deckArrayList.clear();
+                        deckArrayList.addAll(tmp.second);
 
-                    dataAdapter.notifyDataSetChanged();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                        dataAdapter.notifyDataSetChanged();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 break;
             case EXPORT_REQUEST_CODE:
-                try {
-                    OutputStream outputStream = getContentResolver().openOutputStream(data.getData());
-                    DataWriter.exportTo(outputStream, noteTypesArrayList, deckArrayList);
-                    outputStream.close();
-                } catch (IOException | JSONException e) {
-                    e.printStackTrace();
+                if (resultCode == RESULT_OK) {
+                    try {
+                        OutputStream outputStream = getContentResolver().openOutputStream(data.getData());
+                        DataWriter.exportTo(outputStream, noteTypesArrayList, deckArrayList);
+                        outputStream.close();
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
                 break;
         }
@@ -246,6 +255,24 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         // User touched the dialog's positive button
+        Dialog dialogView = dialog.getDialog();
+        EditText et = dialogView.findViewById(R.id.edittext_name_dialog);
+        Log.d("debug_add_deck", et.getText().toString());
+
+        // find notetype
+        NoteType baseNoteType = null;
+        for(Deck deck : MainActivity.deckArrayList) {
+
+            // if exists, do nothing
+            if (deck.getName().equals(et.getText().toString())){
+                return ;
+            }
+
+        }
+        Deck newDeck = new Deck(et.getText().toString());
+        // add it
+        MainActivity.deckArrayList.add(newDeck);
+        dataAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -267,7 +294,6 @@ public class MainActivity extends AppCompatActivity
     }
     public static Deck getDeckWithName(String name){
         for (Deck deck: MainActivity.deckArrayList){
-            Log.d("compare", "getDeckWithName: " + deck.getName() + name);
             if (deck.getName().equals(name)){
                 return deck;
             }

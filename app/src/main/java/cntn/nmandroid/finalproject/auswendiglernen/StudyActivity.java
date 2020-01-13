@@ -60,14 +60,12 @@ public class StudyActivity extends AppCompatActivity {
 
         if (index >= cardArrayList.size()) {
             finishDeck();
+        } else {
+            updateQuestionHtml(index);
+            changeWebViewContent(R.id.webview_question_study, questionHtml);
+            changeWebViewContent(R.id.webview_question_answer_study,questionHtml);
+            viewSwitcher = findViewById(R.id.viewswitcher_study);
         }
-
-        updateQuestionHtml(index);
-        changeWebViewContent(R.id.webview_question_study, questionHtml);
-        changeWebViewContent(R.id.webview_question_answer_study,questionHtml);
-        viewSwitcher=findViewById(R.id.viewswitcher_study);
-
-
     }
     private void createNavigationDrawer(){
         drawerLayout = (DrawerLayout)findViewById(R.id.activity_study);
@@ -158,6 +156,8 @@ public class StudyActivity extends AppCompatActivity {
         webView.loadDataWithBaseURL("",html,mimeType,encoding,"");
     }
     private void finishDeck(){
+        // TODO: revise this function: shouldn't this activity just close, giving control back to
+        //  the parent activity (MainActivity)
         Intent intent = new Intent(StudyActivity.this,MainActivity.class);
         startActivity(intent);
     }
