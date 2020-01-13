@@ -1,5 +1,6 @@
 package cntn.nmandroid.finalproject.auswendiglernen;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.widget.ViewSwitcher;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -48,24 +50,27 @@ public class StudyActivity extends AppCompatActivity {
         intentMain = getIntent();
         deckName = intentMain.getStringExtra("deckName");
 
-        Toolbar toolbar = findViewById(R.id.toolbar_study);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        createNavigationDrawer();
-
         deck = MainActivity.getDeckWithName(deckName);
-
         cardArrayList = new ArrayList<>(deck.getCardList());
         index = 0;
 
         if (index >= cardArrayList.size()) {
-            finishDeck();
+            finishDeck("No notes in deck");
         } else {
             updateQuestionHtml(index);
             changeWebViewContent(R.id.webview_question_study, questionHtml);
             changeWebViewContent(R.id.webview_question_answer_study,questionHtml);
             viewSwitcher = findViewById(R.id.viewswitcher_study);
         }
+
+        Toolbar toolbar = findViewById(R.id.toolbar_study);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        createNavigationDrawer();
+
+
+
+
     }
     private void createNavigationDrawer(){
         drawerLayout = (DrawerLayout)findViewById(R.id.activity_study);
@@ -138,7 +143,7 @@ public class StudyActivity extends AppCompatActivity {
             changeWebViewContent(R.id.webview_question_answer_study, questionHtml);
         }
         else{
-            finishDeck();
+            finishDeck("You have finished studying");
         }
     }
     private void updateQuestionHtml(int i){
@@ -155,11 +160,21 @@ public class StudyActivity extends AppCompatActivity {
         WebView webView = findViewById(id);
         webView.loadDataWithBaseURL("",html,mimeType,encoding,"");
     }
-    private void finishDeck(){
+    private void finishDeck(String msg){
         // TODO: revise this function: shouldn't this activity just close, giving control back to
         //  the parent activity (MainActivity)
-        Intent intent = new Intent(StudyActivity.this,MainActivity.class);
-        startActivity(intent);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setMessage(msg)
+                .setPositiveButton(android.R.string.yes,new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Continue with delete operation
+                        dialog.dismiss();
+                        StudyActivity.this.finish();
+                    }
+                })
+                ;
+        builder.create().show();
+
     }
     public void onClickAgain(View view) {
         changeQuestion();
