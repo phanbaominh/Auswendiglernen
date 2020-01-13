@@ -27,14 +27,43 @@ public class AddNoteActivity extends AppCompatActivity {
     private NoteType currentNoteType = null;
     private Deck currentDeck = null;
 
+    // NoteID != null: is editing a previously existed note.
+    // NoteID == null: is creating a new note.
+    private String noteId;
+    private Note oldNote;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
 
-        fieldList = new ArrayList<>();
-        fieldList.addAll(MainActivity.noteTypesArrayList.get(0).getFieldList());
-        renderTemplateList(0);
+        createSpinner();
+
+        noteId = getIntent().getStringExtra("noteId");
+        if (noteId != null) {
+            String deckName = getIntent().getStringExtra("deckName");
+            Deck deck = MainActivity.getDeckWithName(deckName);
+            Note note = deck.getNoteById(noteId);
+            oldNote = note;
+
+            int deckIndex = MainActivity.deckArrayList.indexOf(deck);
+            int typeIndex = MainActivity.noteTypesArrayList.indexOf(note.getNoteType());
+
+            Spinner spinnerType = findViewById(R.id.spinner_type_add_note);
+            Spinner spinnerDeck = findViewById(R.id.spinner_deck_add_note);
+            spinnerType.setSelection(typeIndex);
+            spinnerDeck.setSelection(deckIndex);
+
+            fieldList = new ArrayList<>();
+            fieldList.addAll(MainActivity.noteTypesArrayList.get(typeIndex).getFieldList());
+            renderTemplateList(typeIndex);
+        } else {
+            fieldList = new ArrayList<>();
+            fieldList.addAll(MainActivity.noteTypesArrayList.get(0).getFieldList());
+            renderTemplateList(0);
+        }
+
+        createListView();
 
         Toolbar toolbar = findViewById(R.id.toolbar_add_note);
         setSupportActionBar(toolbar);
@@ -42,9 +71,6 @@ public class AddNoteActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-        createSpinner();
-        createListView();
     }
 
     private void createListView() {
@@ -77,7 +103,15 @@ public class AddNoteActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.actionbar_item_add_add_note:
                 Note newNote = getFormData();
-                currentDeck.addNode(newNote);
+                if (noteId != null) {
+                    // Edit
+                    oldNote.setNoteType(newNote.getNoteType());
+                    oldNote.setValueList(newNote.getValueList());
+                    oldNote.resetCardsLearningState();
+                } else {
+                    // Create
+                    currentDeck.addNode(newNote);
+                }
                 finish();
                 break;
             default:

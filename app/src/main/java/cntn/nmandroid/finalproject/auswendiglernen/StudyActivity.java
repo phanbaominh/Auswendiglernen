@@ -126,9 +126,13 @@ public class StudyActivity extends AppCompatActivity {
             return true;
         switch (item.getItemId()) {
             case R.id.action_bar_study_editNote:
+                Intent editIntent = new Intent(this, AddNoteActivity.class);
+                editIntent.putExtra("noteId", cardArrayList.get(index).noteId);
+                editIntent.putExtra("deckName", deckName);
+                startActivity(editIntent);
+                finish();
                 break;
             case R.id.action_bar_study_deleteNote:
-                Log.d("ID", cardArrayList.get(index).noteId);
                 deck.deleteNoteById(cardArrayList.get(index).noteId);
                 finish();
                 break;

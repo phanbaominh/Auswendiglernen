@@ -104,4 +104,13 @@ public class Deck {
         }
         noteList.remove(index);
     }
+
+    public Note getNoteById(String noteId) {
+        for (int i = 0; i < noteList.size(); ++i) {
+            if (noteList.get(i).getId().equals(noteId)) {
+                return noteList.get(i);
+            }
+        }
+        return null;
+    }
 }

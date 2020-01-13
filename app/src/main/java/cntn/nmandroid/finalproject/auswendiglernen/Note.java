@@ -44,6 +44,10 @@ public class Note {
         this.valueList = valueList;
     }
 
+    public void resetCardsLearningState() {
+        // TODO: reset cards' learning state after the parent note is edited.
+    }
+
     private Note() {
     }
 
