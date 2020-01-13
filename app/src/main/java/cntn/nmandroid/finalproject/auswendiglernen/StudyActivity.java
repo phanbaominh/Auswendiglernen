@@ -64,15 +64,6 @@ public class StudyActivity extends AppCompatActivity {
             changeWebViewContent(R.id.webview_question_answer_study, questionHtml);
             viewSwitcher = findViewById(R.id.viewswitcher_study);
         }
-
-        Toolbar toolbar = findViewById(R.id.toolbar_study);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        createNavigationDrawer();
-
-
-
-
     }
 
     private void createNavigationDrawer() {
