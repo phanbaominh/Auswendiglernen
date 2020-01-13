@@ -177,29 +177,33 @@ public class MainActivity extends AppCompatActivity
 
         switch (requestCode) {
             case IMPORT_REQUEST_CODE:
-                try {
-                    InputStream inputStream = getContentResolver().openInputStream(data.getData());
-                    Pair<ArrayList<NoteType>, ArrayList<Deck>> tmp = DataReader.importFrom(inputStream);
-                    inputStream.close();
+                if (resultCode == RESULT_OK) {
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(data.getData());
+                        Pair<ArrayList<NoteType>, ArrayList<Deck>> tmp = DataReader.importFrom(inputStream);
+                        inputStream.close();
 
-                    noteTypesArrayList.clear();
-                    noteTypesArrayList.addAll(tmp.first);
+                        noteTypesArrayList.clear();
+                        noteTypesArrayList.addAll(tmp.first);
 
-                    deckArrayList.clear();
-                    deckArrayList.addAll(tmp.second);
+                        deckArrayList.clear();
+                        deckArrayList.addAll(tmp.second);
 
-                    dataAdapter.notifyDataSetChanged();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                        dataAdapter.notifyDataSetChanged();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 break;
             case EXPORT_REQUEST_CODE:
-                try {
-                    OutputStream outputStream = getContentResolver().openOutputStream(data.getData());
-                    DataWriter.exportTo(outputStream, noteTypesArrayList, deckArrayList);
-                    outputStream.close();
-                } catch (IOException | JSONException e) {
-                    e.printStackTrace();
+                if (resultCode == RESULT_OK) {
+                    try {
+                        OutputStream outputStream = getContentResolver().openOutputStream(data.getData());
+                        DataWriter.exportTo(outputStream, noteTypesArrayList, deckArrayList);
+                        outputStream.close();
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
                 break;
         }
@@ -265,8 +269,7 @@ public class MainActivity extends AppCompatActivity
             }
 
         }
-        Deck newDeck = new Deck();
-        newDeck.setName(et.getText().toString());
+        Deck newDeck = new Deck(et.getText().toString());
         // add it
         MainActivity.deckArrayList.add(newDeck);
         dataAdapter.notifyDataSetChanged();

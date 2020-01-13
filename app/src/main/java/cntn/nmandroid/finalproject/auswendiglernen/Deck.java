@@ -33,6 +33,14 @@ public class Deck {
         this.noteList = noteList;
     }
 
+    private Deck() {
+    }
+
+    public Deck(String name) {
+        this.name = name;
+        noteList = new ArrayList<>();
+    }
+
     JSONObject toJSON() throws JSONException {
         JSONObject obj = new JSONObject();
         obj.put("name", name);
