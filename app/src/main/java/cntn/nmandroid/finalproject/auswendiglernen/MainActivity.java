@@ -89,7 +89,6 @@ public class MainActivity extends AppCompatActivity
         noteTypesArrayList = dataPair.first;
         allNoteArrayList = new ArrayList<Note>();
         createAllNoteArrayList();
-        Log.d("allnotearray", "createAllNoteArrayList: " + allNoteArrayList.toString());
     }
 
     private void createListView(){
@@ -188,6 +187,7 @@ public class MainActivity extends AppCompatActivity
 
                         deckArrayList.clear();
                         deckArrayList.addAll(tmp.second);
+                        createAllNoteArrayList();
 
                         dataAdapter.notifyDataSetChanged();
                     } catch (IOException e) {
