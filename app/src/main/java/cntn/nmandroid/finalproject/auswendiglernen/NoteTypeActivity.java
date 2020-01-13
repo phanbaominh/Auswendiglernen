@@ -37,10 +37,16 @@ public class NoteTypeActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-
+        updateNumberOfNotetypesOnActionBar();
 
         createListView();
+    }
+
+    private void updateNumberOfNotetypesOnActionBar() {
+        // lay so luong note type de add vao actionbar_item_count_note_types
+
+        TextView tv = this.findViewById(R.id.actionbar_item_count_note_types);
+        tv.setText(String.format("%d note types available", MainActivity.noteTypesArrayList.size()));
     }
 
     private void createListView(){
@@ -111,6 +117,8 @@ public class NoteTypeActivity extends AppCompatActivity
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.context_menu_item_delete_note_types:
+
+                updateNumberOfNotetypesOnActionBar();
                 return true;
             case R.id.context_menu_item_rename_note_types:
                 return true;
@@ -162,6 +170,7 @@ public class NoteTypeActivity extends AppCompatActivity
         MainActivity.noteTypesArrayList.add(newNoteType);
         noteTypeAdapter.notifyDataSetChanged();
 
+        updateNumberOfNotetypesOnActionBar();
     }
 
     @Override
