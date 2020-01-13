@@ -1,7 +1,6 @@
 package cntn.nmandroid.finalproject.auswendiglernen;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,23 +15,20 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class AddNoteActivity extends AppCompatActivity {
     private AddNoteAdapter dataAdapter;
     private ArrayList<String> fieldList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
 
-        fieldList = new ArrayList<String>();
-        for (String string : MainActivity.noteTypesArrayList.get(0).getFieldList()){
-            fieldList.add(string);
-        }
-        changeNoteTypes(0);
+        fieldList = new ArrayList<>();
+        fieldList.addAll(MainActivity.noteTypesArrayList.get(0).getFieldList());
+        renderTemplateList(0);
 
         Toolbar toolbar = findViewById(R.id.toolbar_add_note);
         setSupportActionBar(toolbar);
@@ -41,24 +37,19 @@ public class AddNoteActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        creatSpinner();
+        createSpinner();
         createListView();
-
     }
-
 
     private void createListView(){
-        //dataArrayList = new ArrayList<>();
-        dataAdapter = new AddNoteAdapter(AddNoteActivity.this, new ArrayList<String>(fieldList));
-        // dataArrayList.add(new Data("Gay"));
+        dataAdapter = new AddNoteAdapter(AddNoteActivity.this, fieldList);
         ListView listView = findViewById(R.id.listview_add_note);
-
         listView.setAdapter(dataAdapter);
+        listView.setDivider(null);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-
         MenuInflater menuInflater = this.getMenuInflater();
         menuInflater.inflate(R.menu.actionbar_add_note, menu);
 
@@ -73,13 +64,14 @@ public class AddNoteActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
     }
 
-    private void creatSpinner() {
+    private void createSpinner() {
         Spinner spinnerDeck = findViewById(R.id.spinner_deck_add_note);
         Spinner spinnerType = findViewById(R.id.spinner_type_add_note);
 
@@ -90,18 +82,9 @@ public class AddNoteActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 fieldList.clear();
-                for (String string : MainActivity.noteTypesArrayList.get(position).getFieldList()){
-                    fieldList.add(string);
-                }
-                if (dataAdapter != null){
-                    dataAdapter.clear();
-                    dataAdapter.addAll(fieldList);
-                }
-                else{
-
-                }
-                changeNoteTypes(position);
+                fieldList.addAll(MainActivity.noteTypesArrayList.get(position).getFieldList());
                 dataAdapter.notifyDataSetChanged();
+                renderTemplateList(position);
             }
 
             @Override
@@ -121,16 +104,31 @@ public class AddNoteActivity extends AppCompatActivity {
             }
         });
     }
-    private void changeNoteTypes(int pos){
-        Button button = findViewById(R.id.button_type_add_note);
-        String cardType = "Card Types:";
-        for (int i = 0;i<MainActivity.noteTypesArrayList.get(pos).getTemplateList().size();i++){
-            cardType += " Card" + (i+1);
+
+    private void renderTemplateList(int pos) {
+        ArrayList<CardTemplate> templateList = MainActivity.noteTypesArrayList
+                .get(pos)
+                .getTemplateList();
+
+        StringBuilder builder = new StringBuilder();
+        builder.append("Card Types:");
+        for (int i = 0; i < templateList.size(); ++i) {
+            if (i > 0) {
+                builder.append(',');
+            }
+            builder.append(" Card ").append(i + 1);
         }
-        button.setText(cardType);
+
+        Button button = findViewById(R.id.button_type_add_note);
+        button.setText(builder.toString());
     }
+
     private void setUpSpinner(Spinner spinner, String[] items){
-        ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item,items);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                R.layout.support_simple_spinner_dropdown_item,
+                items
+        );
         spinner.setAdapter(adapter);
     }
 }

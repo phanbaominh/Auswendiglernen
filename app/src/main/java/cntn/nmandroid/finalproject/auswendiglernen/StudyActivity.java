@@ -121,7 +121,8 @@ public class StudyActivity extends AppCompatActivity {
         if(toggle.onOptionsItemSelected(item))
             return true;
         switch (item.getItemId()) {
-            case R.id.actionbar_item_do_study:
+            case R.id.action_bar_study_editNote:
+
                 break;
         }
         return super.onOptionsItemSelected(item);
