@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cntn.nmandroid.finalproject.auswendiglernen">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".CardTemplateActivity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -16,11 +19,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CardBrowserActivity"></activity>
-        <activity android:name=".NoteTypeActivity"></activity>
-        <activity android:name=".AddNoteActivity"></activity>
-        <activity android:name=".StudyActivity"></activity>
-        <activity android:name=".FieldActivity"></activity>
+        <activity android:name=".CardBrowserActivity" />
+        <activity android:name=".NoteTypeActivity" />
+        <activity android:name=".AddNoteActivity" />
+        <activity android:name=".StudyActivity" />
+        <activity android:name=".FieldActivity" />
     </application>
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+
 </manifest>

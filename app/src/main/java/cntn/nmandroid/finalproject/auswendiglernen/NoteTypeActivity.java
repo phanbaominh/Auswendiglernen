@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -110,6 +111,10 @@ public class NoteTypeActivity extends AppCompatActivity
             case R.id.context_menu_item_rename_note_types:
                 return true;
             case R.id.context_menu_item_edit_note_types:
+                Intent intent = new Intent(NoteTypeActivity.this, CardTemplateActivity.class);
+                intent.putExtra("notetypeId", (int)info.id);
+                Log.d("debug_putextra", String.valueOf(info.id));
+                startActivity(intent);
                 return true;
             default:
                 return super.onContextItemSelected(item);
