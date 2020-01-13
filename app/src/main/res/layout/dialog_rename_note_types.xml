@@ -2,15 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <Spinner
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/spinner_note_types_dialog_note_types"
-        android:spinnerMode="dropdown"/>
+        android:text="Rename to:"
+        android:textSize="20dp"
+        />
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/rename_dialog_note_types"
-        android:text="Note Type Name"
+        android:id="@+id/edittext_dialog_rename_note_types"
+        android:hint="New Note Type Name"
         />
 </LinearLayout>

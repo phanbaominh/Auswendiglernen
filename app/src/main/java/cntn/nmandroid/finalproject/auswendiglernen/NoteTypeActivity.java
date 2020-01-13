@@ -1,17 +1,22 @@
 package cntn.nmandroid.finalproject.auswendiglernen;
 
 import android.content.Intent;
+import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +24,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 
 public class NoteTypeActivity extends AppCompatActivity
-        implements AddNoteTypesDialogFragment.AddNoteTypesDialogListener {
+        implements AddNoteTypesDialogFragment.AddNoteTypesDialogListener, RenameNoteTypesDialogFragment.RenameNoteTypesDialogListener {
     private NoteTypeAdapter noteTypeAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +37,16 @@ public class NoteTypeActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-
+        updateNumberOfNotetypesOnActionBar();
 
         createListView();
+    }
+
+    private void updateNumberOfNotetypesOnActionBar() {
+        // lay so luong note type de add vao actionbar_item_count_note_types
+
+        TextView tv = this.findViewById(R.id.actionbar_item_count_note_types);
+        tv.setText(String.format("%d note types available", MainActivity.noteTypesArrayList.size()));
     }
 
     private void createListView(){
@@ -104,12 +115,21 @@ public class NoteTypeActivity extends AppCompatActivity
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        Log.d("debug_rename_notetype", String.valueOf(info.id));
         switch (item.getItemId()) {
             case R.id.context_menu_item_delete_note_types:
+                MainActivity.noteTypesArrayList.remove((int)info.id);
+                updateNumberOfNotetypesOnActionBar();
+                noteTypeAdapter.notifyDataSetChanged();
                 return true;
             case R.id.context_menu_item_rename_note_types:
+                showRenameDialog((int)info.id);
                 return true;
             case R.id.context_menu_item_edit_note_types:
+                Intent intent = new Intent(NoteTypeActivity.this, CardTemplateActivity.class);
+                intent.putExtra("notetypeId", (int)info.id);
+                Log.d("debug_putextra", String.valueOf(info.id));
+                startActivity(intent);
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -117,10 +137,16 @@ public class NoteTypeActivity extends AppCompatActivity
     }
     public void showNoticeDialog() {
         // Create an instance of the dialog fragment and show it
+
         DialogFragment dialog = new AddNoteTypesDialogFragment();
         dialog.show(getSupportFragmentManager(), "AddNoteTypesDialogFragment");
 
 
+    }
+
+    public void showRenameDialog(int id){
+        DialogFragment dialogFragment = new RenameNoteTypesDialogFragment(id) ;
+        dialogFragment.show(getSupportFragmentManager(), "RenameNoteTypesDialogFragment");
     }
 
     // The dialog fragment receives a reference to this Activity through the
@@ -129,10 +155,52 @@ public class NoteTypeActivity extends AppCompatActivity
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         // User touched the dialog's positive button
+        Dialog dialogView = dialog.getDialog();
+        EditText et = dialogView.findViewById(R.id.rename_dialog_note_types);
+        Spinner spin = dialogView.findViewById(R.id.spinner_note_types_dialog_note_types);
+        String base = spin.getSelectedItem().toString();
+        Log.d("debug_add_notetype", et.getText().toString());
+        Log.d("debug_add_notetype", base);
+
+        // find notetype
+        NoteType baseNoteType = null;
+        for(NoteType noteType : MainActivity.noteTypesArrayList) {
+
+            // if exists, do nothing
+            if (noteType.getName().equals(et.getText().toString())){
+                return ;
+            }
+
+            // found
+            if (noteType.getName().equals(base)){
+                baseNoteType = noteType;
+            }
+        }
+        NoteType newNoteType = new NoteType(et.getText().toString(), baseNoteType.getFieldList(), baseNoteType.getTemplateList());
+
+        // add it
+        MainActivity.noteTypesArrayList.add(newNoteType);
+        noteTypeAdapter.notifyDataSetChanged();
+
+        updateNumberOfNotetypesOnActionBar();
     }
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
         // User touched the dialog's negative button
+    }
+
+    @Override
+    public void onDialogPositiveClickRename(DialogFragment dialog) {
+        int notetypeId = ((RenameNoteTypesDialogFragment)dialog).getNotetypeId();
+        Dialog dialogView = dialog.getDialog();
+        EditText et = dialogView.findViewById(R.id.edittext_dialog_rename_note_types);
+        MainActivity.noteTypesArrayList.get(notetypeId).setName(et.getText().toString());
+        noteTypeAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDialogNegativeClickRename(DialogFragment dialog) {
+
     }
 }
