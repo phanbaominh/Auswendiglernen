@@ -40,7 +40,10 @@ public class Deck {
         this.name = name;
         noteList = new ArrayList<>();
     }
-
+    public Deck(Deck deck) {
+        this.name = deck.getName();
+        this.noteList = new ArrayList<>(deck.getNoteList());
+    }
     JSONObject toJSON() throws JSONException {
         JSONObject obj = new JSONObject();
         obj.put("name", name);

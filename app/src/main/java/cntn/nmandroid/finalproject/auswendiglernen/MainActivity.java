@@ -3,6 +3,7 @@ package cntn.nmandroid.finalproject.auswendiglernen;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -10,6 +11,7 @@ import androidx.fragment.app.DialogFragment;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -53,6 +55,8 @@ public class MainActivity extends AppCompatActivity
     private final int EXPORT_REQUEST_CODE = 420;
     private final int PERMISSION_REQUEST_CODE = 42069;
 
+    private int dialogMarker = 0;
+    private int currentPosition = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -232,14 +236,23 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        currentPosition = info.position;
         switch (item.getItemId()) {
             case R.id.context_menu_item_delete_main:
-                return true;
+                deckArrayList.remove(info.position);
+                createAllNoteArrayList();
+                dataAdapter.notifyDataSetChanged();
+                break;
             case R.id.context_menu_item_options_main:
-                return true;
-            default:
-                return super.onContextItemSelected(item);
+
+                break;
+            case R.id.context_menu_item_rename_main:
+                dialogMarker = 1;
+                showNameDialog();
+
+                break;
         }
+        return super.onContextItemSelected(item);
     }
     public void showNameDialog() {
         // Create an instance of the dialog fragment and show it
@@ -258,20 +271,38 @@ public class MainActivity extends AppCompatActivity
         Dialog dialogView = dialog.getDialog();
         EditText et = dialogView.findViewById(R.id.edittext_name_dialog);
         Log.d("debug_add_deck", et.getText().toString());
-
+        Boolean end = false;
         // find notetype
         NoteType baseNoteType = null;
         for(Deck deck : MainActivity.deckArrayList) {
 
             // if exists, do nothing
             if (deck.getName().equals(et.getText().toString())){
-                return ;
+                AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                        .setMessage("Already existed deck with that name")
+                        .setPositiveButton(android.R.string.yes,new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Continue with delete operation
+                                dialog.dismiss();
+                            }
+                        })
+                        ;
+                end = true;
+            }
+            if (end){
+                return;
             }
 
         }
-        Deck newDeck = new Deck(et.getText().toString());
-        // add it
-        MainActivity.deckArrayList.add(newDeck);
+        if (dialogMarker == 0) {
+            Deck newDeck = new Deck(et.getText().toString());
+            // add it
+            MainActivity.deckArrayList.add(newDeck);
+        }
+        else
+        {
+            deckArrayList.get(currentPosition).setName(et.getText().toString());
+        }
         dataAdapter.notifyDataSetChanged();
     }
 
@@ -281,6 +312,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void onClickFABAddDeck(View view) {
+        dialogMarker = 0;
         showNameDialog();
     }
 

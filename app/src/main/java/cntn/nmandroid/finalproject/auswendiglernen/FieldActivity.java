@@ -27,7 +27,7 @@ public class FieldActivity extends AppCompatActivity implements NameDialogFragme
     private FieldAdapter dataAdapter;
     private ArrayList<String> fieldList;
     private int dialogMarker = 0;
-    private int positionGlobal = 0;
+    private int currentPosition = 0;
     private int noteTypePosition = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +109,7 @@ public class FieldActivity extends AppCompatActivity implements NameDialogFragme
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        positionGlobal = info.position;
+        currentPosition = info.position;
         switch (item.getItemId()) {
             case R.id.context_menu_item_delete_field:
                 fieldList.remove(info.position);
@@ -150,12 +150,12 @@ public class FieldActivity extends AppCompatActivity implements NameDialogFragme
         Dialog dialogView = dialog.getDialog();
         EditText et = dialogView.findViewById(R.id.edittext_name_dialog);
         if (dialogMarker == 0){
-            fieldList.set(positionGlobal,et.getText().toString());
+            fieldList.set(currentPosition,et.getText().toString());
         }
         else if (dialogMarker == 1){
             int newPos = Integer.parseInt(et.getText().toString());
             if (newPos >=0 && newPos < fieldList.size()){
-                reposition(positionGlobal,newPos);
+                reposition(currentPosition,newPos);
             }
 
         }
