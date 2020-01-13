@@ -11,4 +11,8 @@
         android:title="Delete"
         android:id="@+id/context_menu_item_delete_main"
         />
+    <item
+        android:title="Rename"
+        android:id="@+id/context_menu_item_rename_main"
+        />
 </menu>

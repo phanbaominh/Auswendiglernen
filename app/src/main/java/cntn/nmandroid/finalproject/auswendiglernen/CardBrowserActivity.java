@@ -1,5 +1,6 @@
 package cntn.nmandroid.finalproject.auswendiglernen;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
