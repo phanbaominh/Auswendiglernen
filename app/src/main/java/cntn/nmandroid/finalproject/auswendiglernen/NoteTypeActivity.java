@@ -23,7 +23,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 
 public class NoteTypeActivity extends AppCompatActivity
-        implements AddNoteTypesDialogFragment.AddNoteTypesDialogListener {
+        implements AddNoteTypesDialogFragment.AddNoteTypesDialogListener, RenameNoteTypesDialogFragment.RenameNoteTypesDialogListener {
     private NoteTypeAdapter noteTypeAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,12 +106,15 @@ public class NoteTypeActivity extends AppCompatActivity
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        Log.d("debug_rename_notetype", String.valueOf(info.id));
         switch (item.getItemId()) {
             case R.id.context_menu_item_delete_note_types:
-
+                MainActivity.noteTypesArrayList.remove((int)info.id);
                 updateNumberOfNotetypesOnActionBar();
+                noteTypeAdapter.notifyDataSetChanged();
                 return true;
             case R.id.context_menu_item_rename_note_types:
+                showRenameDialog((int)info.id);
                 return true;
             case R.id.context_menu_item_edit_note_types:
                 return true;
@@ -126,6 +129,11 @@ public class NoteTypeActivity extends AppCompatActivity
         dialog.show(getSupportFragmentManager(), "AddNoteTypesDialogFragment");
 
 
+    }
+
+    public void showRenameDialog(int id){
+        DialogFragment dialogFragment = new RenameNoteTypesDialogFragment(id) ;
+        dialogFragment.show(getSupportFragmentManager(), "RenameNoteTypesDialogFragment");
     }
 
     // The dialog fragment receives a reference to this Activity through the
@@ -167,5 +175,19 @@ public class NoteTypeActivity extends AppCompatActivity
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
         // User touched the dialog's negative button
+    }
+
+    @Override
+    public void onDialogPositiveClickRename(DialogFragment dialog) {
+        int notetypeId = ((RenameNoteTypesDialogFragment)dialog).getNotetypeId();
+        Dialog dialogView = dialog.getDialog();
+        EditText et = dialogView.findViewById(R.id.edittext_dialog_rename_note_types);
+        MainActivity.noteTypesArrayList.get(notetypeId).setName(et.getText().toString());
+        noteTypeAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDialogNegativeClickRename(DialogFragment dialog) {
+
     }
 }
