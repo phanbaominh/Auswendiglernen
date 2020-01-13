@@ -29,17 +29,18 @@ import java.util.ArrayList;
 
 public class CardBrowserActivity extends AppCompatActivity {
     private CardBrowserAdapter dataAdapter;
-    private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
-    private NavigationView nagivationView;
-    //public static ArrayList<Data> dataArrayList;
-    private ArrayList<Note> noteArrayList;
+
+    // ID of the current deck, or null if user chooses "All decks"
+    private String currentDeckId;
+
+    // List of Note to display
+    private ArrayList<Note> noteList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_browser);
-
-        noteArrayList = new ArrayList<>();
 
         Toolbar toolbar = findViewById(R.id.toolbar_card_browser);
         setSupportActionBar(toolbar);
@@ -47,20 +48,108 @@ public class CardBrowserActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(false);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        currentDeckId = null;
+        noteList = new ArrayList<>();
+
         createSortOptions();
         createNavigationDrawer();
         createListView();
-
     }
 
-    private void createListView(){
-        dataAdapter = new CardBrowserAdapter(CardBrowserActivity.this,new ArrayList<>(MainActivity.allNoteArrayList));
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        initialiseDeckSpinner();
+        initialiseNoteList();
+    }
+
+    private void intialiseAllDecks() {
+        noteList.clear();
+        for (Deck deck : MainActivity.deckArrayList) {
+            noteList.addAll(deck.getNoteList());
+        }
+    }
+
+    private boolean deckSpinnerInitialised;
+
+    private void initialiseDeckSpinner() {
+        // Get all deck names with "All decks"
+        ArrayList<String> deckList = new ArrayList<>();
+        deckList.add("All decks");
+        for (Deck deck : MainActivity.deckArrayList) {
+            deckList.add(deck.getName());
+        }
+
+        final Spinner spinner = findViewById(R.id.spinner_actionbar_card_browser);
+        createSpinner(spinner, deckList);
+
+        deckSpinnerInitialised = false;
+
+        int currentPosition = 0;
+        if (currentDeckId != null) {
+            for (int i = 0; i < MainActivity.deckArrayList.size(); ++i) {
+                if (MainActivity.deckArrayList.get(i).getId().equals(currentDeckId)) {
+                    currentPosition = i + 1;
+                    break;
+                }
+            }
+        }
+
+        spinner.setSelection(currentPosition);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (deckSpinnerInitialised) {
+                    if (position != 0) {
+                        String deckName = spinner.getSelectedItem().toString();
+                        noteList.clear();
+                        noteList.addAll(MainActivity.getDeckWithName(deckName).getNoteList());
+                        currentDeckId = MainActivity.getDeckWithName(deckName).getId();
+                    } else {
+                        intialiseAllDecks();
+                        currentDeckId = null;
+                    }
+                    dataAdapter.notifyDataSetChanged();
+                } else {
+                    deckSpinnerInitialised = true;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void initialiseNoteList() {
+        int position = -1;
+        if (currentDeckId != null) {
+            for (int i = 0; i < MainActivity.deckArrayList.size(); ++i) {
+                if (MainActivity.deckArrayList.get(i).getId().equals(currentDeckId)) {
+                    position = i;
+                    break;
+                }
+            }
+        }
+
+        if (position != -1) {
+            String deckName = MainActivity.deckArrayList.get(position).getName();
+            noteList.clear();
+            noteList.addAll(MainActivity.getDeckWithName(deckName).getNoteList());
+        } else {
+            intialiseAllDecks();
+        }
+    }
+
+    private void createListView() {
+        dataAdapter = new CardBrowserAdapter(CardBrowserActivity.this, noteList);
         ListView listView = findViewById(R.id.listview_card_browser);
         listView.setAdapter(dataAdapter);
 
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-
             private int count = 0;
             private ActionMode actionMode = null;
 
@@ -69,7 +158,7 @@ public class CardBrowserActivity extends AppCompatActivity {
                                                   long id, boolean checked) {
                 if (checked) {
                     count++;
-                    dataAdapter.setNewSelection(position, checked);
+                    dataAdapter.setNewSelection(position, true);
                 } else {
                     count--;
                     dataAdapter.removeSelection(position);
@@ -94,6 +183,7 @@ public class CardBrowserActivity extends AppCompatActivity {
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.actionbar_listview_item_suspend:
+                        break;
                 }
                 closeActionMode();
                 return true;
@@ -101,16 +191,16 @@ public class CardBrowserActivity extends AppCompatActivity {
 
             @Override
             public void onDestroyActionMode(ActionMode actionMode) {
-                actionMode=null;
-                count=0;
+                actionMode = null;
+                count = 0;
                 dataAdapter.clearSelection();
             }
 
-            public void closeActionMode(){
-                if(actionMode!=null){
+            public void closeActionMode() {
+                if (actionMode != null) {
                     actionMode.finish();
                 }
-                count=0;
+                count = 0;
                 dataAdapter.clearSelection();
             }
         });
@@ -118,8 +208,6 @@ public class CardBrowserActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-
         MenuInflater menuInflater = this.getMenuInflater();
         menuInflater.inflate(R.menu.actionbar_card_browser, menu);
 
@@ -128,7 +216,7 @@ public class CardBrowserActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(toggle.onOptionsItemSelected(item))
+        if (toggle.onOptionsItemSelected(item))
             return true;
         switch (item.getItemId()) {
             case R.id.actionbar_item_search_card_browser:
@@ -141,22 +229,19 @@ public class CardBrowserActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void createNavigationDrawer(){
-        drawerLayout = (DrawerLayout)findViewById(R.id.activity_card_browser);
-        toggle = new ActionBarDrawerToggle(this, drawerLayout,R.string.Open, R.string.Close);
+    private void createNavigationDrawer() {
+        DrawerLayout drawerLayout = findViewById(R.id.activity_card_browser);
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.Open, R.string.Close);
 
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-
-
-        nagivationView = (NavigationView)findViewById(R.id.navview_card_browser);
-        nagivationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        NavigationView navigationView = findViewById(R.id.navview_card_browser);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
-                switch(id)
-                {
+                switch (id) {
                     case R.id.navbar_item_deck_main:
                         Intent intent = new Intent(CardBrowserActivity.this, MainActivity.class);
                         startActivity(intent);
@@ -164,7 +249,8 @@ public class CardBrowserActivity extends AppCompatActivity {
                     case R.id.navbar_item_card_browser_main:
                         break;
                     case R.id.navbar_item_settings_main:
-                        Toast.makeText(CardBrowserActivity.this, "Settings",Toast.LENGTH_SHORT).show();break;
+                        Toast.makeText(CardBrowserActivity.this, "Settings", Toast.LENGTH_SHORT).show();
+                        break;
                     default:
                         return true;
                 }
@@ -172,16 +258,15 @@ public class CardBrowserActivity extends AppCompatActivity {
             }
         });
     }
-    private void createSortOptions(){
+
+    private void createSortOptions() {
         Spinner spinQuestion = findViewById(R.id.spinner_question_card_browser);
         Spinner spinType = findViewById(R.id.spinner_type_card_browser);
-        final Spinner spinDeck = findViewById(R.id.spinner_actionbar_card_browser);
         String[] questionItems = {"Question"};
         String[] typeItems = {"Answer"};
 
-        createSpinner(spinQuestion,questionItems);
-        createSpinner(spinType,typeItems);
-        createSpinner(spinDeck,MainActivity.getDeckListName());
+        createSpinner(spinQuestion, questionItems);
+        createSpinner(spinType, typeItems);
 
         spinType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -194,48 +279,15 @@ public class CardBrowserActivity extends AppCompatActivity {
 
             }
         });
-
-        spinDeck.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0) {
-                    noteArrayList.clear();
-                    noteArrayList.addAll(MainActivity.getDeckWithName(spinDeck.getSelectedItem().toString()).getNoteList());
-                    dataAdapter.clear();
-                    dataAdapter.addAll(noteArrayList);
-                }
-                else
-                {
-                    if (dataAdapter != null) {
-                        dataAdapter.clear();
-                        dataAdapter.addAll(MainActivity.allNoteArrayList);
-                    }
-                    else {
-
-                    }
-
-                }
-
-                dataAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
     }
 
-    private void createSpinner(Spinner spinner,String[] items){
-
-        ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item,items);
-        //assign adapter to the Spinner
+    private void createSpinner(Spinner spinner, String[] items) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, items);
         spinner.setAdapter(adapter);
     }
-       /* <item
-    android:id="@+id/actionbar_item_spinner_card_browser"
-    android:visible="true"
-    app:showAsAction="collapseActionView"
-    android:title="Decks"
-    app:actionViewClass="android.widget.Spinner" />*/
+
+    private void createSpinner(Spinner spinner, ArrayList<String> items) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, items);
+        spinner.setAdapter(adapter);
+    }
 }
