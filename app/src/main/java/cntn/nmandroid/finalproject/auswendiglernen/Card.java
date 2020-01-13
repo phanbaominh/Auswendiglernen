@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class Card {
     public String attr;
 
+    public String noteId;
     public String htmlFront;
     public String htmlBack;
     public String css;

@@ -24,7 +24,7 @@ public class Deck {
     }
     public ArrayList<Card> getCardList() {
         ArrayList<Card> cardArrayList = new ArrayList<Card>();
-        for (Note note:noteList){
+        for (Note note : noteList) {
             cardArrayList.addAll(note.getCardList());
         }
         return cardArrayList;
@@ -92,5 +92,16 @@ public class Deck {
         reader.endArray();
 
         return deckList;
+    }
+
+    public void deleteNoteById(String noteId) {
+        int index = -1;
+        for (int i = 0; i < noteList.size(); ++i) {
+            if (noteList.get(i).getId().equals(noteId)) {
+                index = i;
+                break;
+            }
+        }
+        noteList.remove(index);
     }
 }

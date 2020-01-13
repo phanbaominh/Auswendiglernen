@@ -9,12 +9,17 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.UUID;
 
 public class Note {
+    private String id;
     private NoteType noteType;
     private ArrayList<String> valueList;
     private ArrayList<Card> cardList;
 
+    public String getId() {
+        return id;
+    }
     public NoteType getNoteType() {
         return noteType;
     }
@@ -43,6 +48,7 @@ public class Note {
     }
 
     public Note(NoteType noteType, ArrayList<String> valueList) {
+        this.id = String.valueOf(UUID.randomUUID());
         this.noteType = noteType;
         this.valueList = valueList;
         this.cardList = new ArrayList<>();
@@ -59,11 +65,11 @@ public class Note {
         while (reader.hasNext()) {
             String name = reader.nextName();
             switch (name) {
+                case "id":
+                    note.id = reader.nextString();
+                    break;
                 case "noteTypeId":
                     String typeId = reader.nextString();
-                    if (!typeIdMap.containsKey(typeId)) {
-                        return null;
-                    }
                     note.noteType = typeIdMap.get(typeId);
                     break;
                 case "valueList":
@@ -71,6 +77,9 @@ public class Note {
                     break;
                 case "cardList":
                     note.cardList = Card.parseList(reader);
+                    for (int i = 0; i < note.cardList.size(); ++i) {
+                        note.cardList.get(i).noteId = note.id;
+                    }
                     break;
                 default:
                     reader.skipValue();
@@ -99,6 +108,7 @@ public class Note {
     public JSONObject toJSON() throws JSONException {
         JSONObject obj = new JSONObject();
 
+        obj.put("id", id);
         obj.put("noteTypeId", noteType.getId());
         obj.put("valueList", CommonParser.stringArrayToJSON(valueList));
 

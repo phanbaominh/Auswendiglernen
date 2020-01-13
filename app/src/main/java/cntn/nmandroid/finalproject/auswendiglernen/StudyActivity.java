@@ -27,11 +27,8 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 
 public class StudyActivity extends AppCompatActivity {
-    private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private ViewSwitcher viewSwitcher;
-    private NavigationView nagivationView;
-    private Intent intentMain;
 
     private Deck deck;
     private ArrayList<Card> cardArrayList;
@@ -47,11 +44,16 @@ public class StudyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_study);
-        intentMain = getIntent();
-        deckName = intentMain.getStringExtra("deckName");
+
+        deckName = getIntent().getStringExtra("deckName");
+
+        Toolbar toolbar = findViewById(R.id.toolbar_study);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        createNavigationDrawer();
 
         deck = MainActivity.getDeckWithName(deckName);
-        cardArrayList = new ArrayList<>(deck.getCardList());
+        cardArrayList = deck.getCardList();
         index = 0;
 
         if (index >= cardArrayList.size()) {
@@ -59,7 +61,7 @@ public class StudyActivity extends AppCompatActivity {
         } else {
             updateQuestionHtml(index);
             changeWebViewContent(R.id.webview_question_study, questionHtml);
-            changeWebViewContent(R.id.webview_question_answer_study,questionHtml);
+            changeWebViewContent(R.id.webview_question_answer_study, questionHtml);
             viewSwitcher = findViewById(R.id.viewswitcher_study);
         }
 
@@ -72,23 +74,23 @@ public class StudyActivity extends AppCompatActivity {
 
 
     }
-    private void createNavigationDrawer(){
-        drawerLayout = (DrawerLayout)findViewById(R.id.activity_study);
-        toggle = new ActionBarDrawerToggle(this, drawerLayout,R.string.Open, R.string.Close);
+
+    private void createNavigationDrawer() {
+        DrawerLayout drawerLayout = findViewById(R.id.activity_study);
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.Open, R.string.Close);
 
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        nagivationView = (NavigationView)findViewById(R.id.navview_study);
-        nagivationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        NavigationView navigationView = findViewById(R.id.navview_study);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 Intent intent;
-                switch(id)
-                {
+                switch (id) {
                     case R.id.navbar_item_deck_main:
                         intent = new Intent(StudyActivity.this, MainActivity.class);
                         startActivity(intent);
@@ -99,7 +101,8 @@ public class StudyActivity extends AppCompatActivity {
                         break;
                     }
                     case R.id.navbar_item_settings_main:
-                        Toast.makeText(StudyActivity.this, "Settings",Toast.LENGTH_SHORT).show();break;
+                        Toast.makeText(StudyActivity.this, "Settings", Toast.LENGTH_SHORT).show();
+                        break;
                     default:
                         return true;
                 }
@@ -107,6 +110,7 @@ public class StudyActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = this.getMenuInflater();
@@ -118,11 +122,15 @@ public class StudyActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(toggle.onOptionsItemSelected(item))
+        if (toggle.onOptionsItemSelected(item))
             return true;
         switch (item.getItemId()) {
             case R.id.action_bar_study_editNote:
-
+                break;
+            case R.id.action_bar_study_deleteNote:
+                Log.d("ID", cardArrayList.get(index).noteId);
+                deck.deleteNoteById(cardArrayList.get(index).noteId);
+                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -131,12 +139,10 @@ public class StudyActivity extends AppCompatActivity {
     public void onClickShowAnswer(View view) {
         viewSwitcher.showNext();
         updateAnswerHtml(index);
-        changeWebViewContent(R.id.webview_answer_study,answerHtml);
-
+        changeWebViewContent(R.id.webview_answer_study, answerHtml);
     }
-    private void changeQuestion(){
 
-
+    private void changeQuestion() {
         if (++index < cardArrayList.size()) {
             viewSwitcher.showNext();
             updateQuestionHtml(index);
@@ -147,19 +153,22 @@ public class StudyActivity extends AppCompatActivity {
             finishDeck("You have finished studying");
         }
     }
-    private void updateQuestionHtml(int i){
+
+    private void updateQuestionHtml(int i) {
         questionHtml = cardArrayList.get(i).htmlFront;
         css = "<style>" + cardArrayList.get(i).css + "</style>";
         questionHtml = css + questionHtml;
     }
-    private void updateAnswerHtml(int i){
+
+    private void updateAnswerHtml(int i) {
         answerHtml = cardArrayList.get(i).htmlBack;
         css = "<style>" + cardArrayList.get(i).css + "</style>";
         answerHtml = css + answerHtml;
     }
-    private void changeWebViewContent(int id, String html){
+
+    private void changeWebViewContent(int id, String html) {
         WebView webView = findViewById(id);
-        webView.loadDataWithBaseURL("",html,mimeType,encoding,"");
+        webView.loadDataWithBaseURL("", html, mimeType, encoding, "");
     }
     private void finishDeck(String msg){
         // TODO: revise this function: shouldn't this activity just close, giving control back to
@@ -177,6 +186,7 @@ public class StudyActivity extends AppCompatActivity {
         builder.create().show();
 
     }
+
     public void onClickAgain(View view) {
         changeQuestion();
     }
