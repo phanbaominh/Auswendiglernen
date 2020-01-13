@@ -12,11 +12,16 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 public class NameDialogFragment extends DialogFragment {
+    private String title;
     public interface NameDialogListener {
         public void onDialogPositiveClick(DialogFragment dialog);
         public void onDialogNegativeClick(DialogFragment dialog);
     }
-
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        title = getArguments().getString("title");
+    }
     // Use this instance of the interface to deliver action events
     NameDialogFragment.NameDialogListener listener;
 
@@ -44,8 +49,7 @@ public class NameDialogFragment extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_name_main, null);
         builder.setView(view);
-
-        builder.setTitle(R.string.dialog_title_name)
+        builder.setTitle(title)
                 .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // Send the positive button event back to the host activity

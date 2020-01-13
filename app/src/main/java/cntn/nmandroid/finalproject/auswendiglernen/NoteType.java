@@ -25,6 +25,9 @@ public class NoteType {
     public String getName() {
         return name;
     }
+    public void setFieldList(ArrayList<String> newFieldList){
+        fieldList = new ArrayList<>(newFieldList);
+    }
     public ArrayList<String> getFieldList() {
         return fieldList;
     }

@@ -20,6 +20,7 @@
         <activity android:name=".NoteTypeActivity"></activity>
         <activity android:name=".AddNoteActivity"></activity>
         <activity android:name=".StudyActivity"></activity>
+        <activity android:name=".FieldActivity"></activity>
     </application>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 </manifest>
