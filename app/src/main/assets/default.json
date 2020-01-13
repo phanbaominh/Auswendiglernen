@@ -39,6 +39,7 @@
   ],
   "deckList": [
     {
+      "id": "1",
       "name": "Deck #1",
       "noteList": [
         {
@@ -74,6 +75,7 @@
       ]
     },
     {
+      "id": "2",
       "name": "Deck #2",
       "noteList": [
         {
