@@ -1,5 +1,6 @@
 package cntn.nmandroid.finalproject.auswendiglernen;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -46,6 +47,14 @@ public class NoteTypeActivity extends AppCompatActivity
         registerForContextMenu(listView);
 
         listView.setAdapter(noteTypeAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(NoteTypeActivity.this,FieldActivity.class);
+                intent.putExtra("position",position);
+                startActivity(intent);
+            }
+        });
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
