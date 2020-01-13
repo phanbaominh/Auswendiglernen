@@ -33,6 +33,10 @@ public class Deck {
         this.noteList = noteList;
     }
 
+    public void addNode(Note newNote) {
+        noteList.add(newNote);
+    }
+
     private Deck() {
     }
 
