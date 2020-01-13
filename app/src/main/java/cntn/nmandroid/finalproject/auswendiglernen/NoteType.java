@@ -35,6 +35,9 @@ public class NoteType {
         return templateList;
     }
 
+    // Setters
+    public void setName(String newName){name = newName;}
+
     // Constructors
     private NoteType() {
     }
