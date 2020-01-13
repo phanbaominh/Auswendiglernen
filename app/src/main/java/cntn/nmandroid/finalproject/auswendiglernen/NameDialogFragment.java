@@ -12,7 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 public class NameDialogFragment extends DialogFragment {
-    private String title;
+    private String title = "Choose Name";
     public interface NameDialogListener {
         public void onDialogPositiveClick(DialogFragment dialog);
         public void onDialogNegativeClick(DialogFragment dialog);
@@ -20,7 +20,9 @@ public class NameDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        title = getArguments().getString("title");
+        if (getArguments() != null) {
+            title = getArguments().getString("title");
+        }
     }
     // Use this instance of the interface to deliver action events
     NameDialogFragment.NameDialogListener listener;

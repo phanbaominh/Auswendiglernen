@@ -45,8 +45,7 @@ public class FieldActivity extends AppCompatActivity implements NameDialogFragme
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
+        getSupportActionBar().setTitle("Edit Fields");
         createListView();
 
     }
