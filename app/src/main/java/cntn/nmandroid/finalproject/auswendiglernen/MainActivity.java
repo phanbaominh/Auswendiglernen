@@ -317,12 +317,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     public static String[] getDeckListName(){
-        ArrayList<String> strs = new ArrayList<String>();
-        strs.add("All Decks");
+        ArrayList<String> nameList = new ArrayList<>();
         for(Deck deck : MainActivity.deckArrayList) {
-            strs.add(deck.getName());
+            nameList.add(deck.getName());
         }
-        return strs.toArray(new String[strs.size()]);
+        return nameList.toArray(new String[nameList.size()]);
     }
     public static Deck getDeckWithName(String name){
         for (Deck deck: MainActivity.deckArrayList){
