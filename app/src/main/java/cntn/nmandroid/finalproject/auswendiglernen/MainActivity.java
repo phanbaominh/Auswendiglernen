@@ -76,7 +76,11 @@ public class MainActivity extends AppCompatActivity
         requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
         requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
-
+    @Override
+    protected void onStart(){
+        super.onStart();
+        dataAdapter.notifyDataSetChanged();
+    }
     @Override
     protected void onPause() {
         super.onPause();
