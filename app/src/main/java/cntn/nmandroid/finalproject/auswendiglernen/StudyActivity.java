@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,6 +55,7 @@ public class StudyActivity extends AppCompatActivity {
     private TextView textViewLearning;
     private TextView textViewReview;
     private int currentQueueType = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +92,7 @@ public class StudyActivity extends AppCompatActivity {
             }
 
             currentQueue = getCurrentQueue();
-            if (currentQueue == null){
+            if (currentQueue == null) {
                 finishDeck("No new card to learn or review");
                 return;
             }
@@ -104,20 +106,20 @@ public class StudyActivity extends AppCompatActivity {
     }
 
     private Queue<Card> getCurrentQueue() {
-        if (learningQueue.size() > 0 && learningQueue.peek().hasPassedDueDate()){
+        if (learningQueue.size() > 0 && learningQueue.peek().hasPassedDueDate()) {
             currentQueueType = 1;
             return learningQueue;
 
         }
-        if (reviewQueue.size() > 0){
+        if (reviewQueue.size() > 0) {
             currentQueueType = 2;
-            return   reviewQueue;
+            return reviewQueue;
         }
-        if (newQueue.size() > 0){
+        if (newQueue.size() > 0) {
             currentQueueType = 0;
             return newQueue;
         }
-        if (learningQueue.size() > 0){
+        if (learningQueue.size() > 0) {
             currentQueueType = 1;
             return learningQueue;
         }
@@ -198,7 +200,7 @@ public class StudyActivity extends AppCompatActivity {
 
     private void changeQuestion(int age) {
         currentCard.updateState(age);
-        switch (currentCard.type){
+        switch (currentCard.type) {
             case 0:
                 newQueue.add(currentCard);
                 break;
@@ -213,8 +215,7 @@ public class StudyActivity extends AppCompatActivity {
             changeWebViewContent(R.id.webview_question_study, questionHtml);
             changeWebViewContent(R.id.webview_question_answer_study, questionHtml);
             updateTextView();
-        }
-        else{
+        } else {
             finishDeck("You have finished studying");
         }
     }
@@ -224,6 +225,8 @@ public class StudyActivity extends AppCompatActivity {
         questionHtml = "<div class=\"card\">" + currentCard.htmlFront + "</div>";
         css = "<style>" + currentCard.css + "</style>";
         questionHtml = css + questionHtml;
+
+        updateTime();
     }
 
     private void updateAnswerHtml(Queue<Card> cardArrayList) {
@@ -238,18 +241,18 @@ public class StudyActivity extends AppCompatActivity {
         WebView webView = findViewById(id);
         webView.loadDataWithBaseURL("", html, mimeType, encoding, "");
     }
-    private void finishDeck(String msg){
+
+    private void finishDeck(String msg) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setMessage(msg)
-                .setPositiveButton(android.R.string.yes,new DialogInterface.OnClickListener() {
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // Continue with delete operation
                         dialog.dismiss();
                         StudyActivity.this.finish();
                     }
-                })
-                ;
+                });
         builder.create().show();
 
     }
@@ -266,7 +269,7 @@ public class StudyActivity extends AppCompatActivity {
         changeQuestion(2);
     }
 
-    private void updateTextView(){
+    private void updateTextView() {
         textViewNew.setText("New: " + String.valueOf(newQueue.size()) + " ");
         textViewLearning.setText("Learning: " + String.valueOf(learningQueue.size()) + " ");
         textViewReview.setText("Review: " + String.valueOf(reviewQueue.size()) + " ");
@@ -275,27 +278,67 @@ public class StudyActivity extends AppCompatActivity {
         textViewLearning.setTypeface(textViewLearning.getTypeface(), Typeface.NORMAL);
         textViewReview.setTypeface(textViewReview.getTypeface(), Typeface.NORMAL);
 
-        textViewNew.setTextColor(getResources().getColor(R.color.colorOnPrimary,null));
-        textViewLearning.setTextColor(getResources().getColor(R.color.colorOnPrimary,null));
-        textViewReview.setTextColor(getResources().getColor(R.color.colorOnPrimary,null));
+        textViewNew.setTextColor(getResources().getColor(R.color.colorOnPrimary, null));
+        textViewLearning.setTextColor(getResources().getColor(R.color.colorOnPrimary, null));
+        textViewReview.setTextColor(getResources().getColor(R.color.colorOnPrimary, null));
 
         switch (currentQueueType) {
             case 0:
                 changeTextColor(textViewNew);
-                textViewNew.setTypeface(textViewNew.getTypeface(),Typeface.BOLD);
+                textViewNew.setTypeface(textViewNew.getTypeface(), Typeface.BOLD);
                 break;
             case 1:
                 changeTextColor(textViewLearning);
-                textViewLearning.setTypeface(textViewLearning.getTypeface(),Typeface.BOLD);
+                textViewLearning.setTypeface(textViewLearning.getTypeface(), Typeface.BOLD);
                 break;
             case 2:
                 changeTextColor(textViewReview);
-                textViewReview.setTypeface(textViewReview.getTypeface(),Typeface.BOLD);
+                textViewReview.setTypeface(textViewReview.getTypeface(), Typeface.BOLD);
                 break;
         }
     }
-    private void changeTextColor(TextView textView){
+
+    private void changeTextColor(TextView textView) {
         textView.setTextColor(Color.parseColor("#007f00"));
     }
 
+    private void updateTime() {
+        Card currentCard = currentQueue.peek();
+        if (currentCard == null) {
+            return;
+        }
+
+        String a, g, e;
+        switch (currentCard.type) {
+            case 0:
+                a = "< 1min";
+                g = "< 10min";
+                e = "3d";
+                break;
+            case 1:
+                a = "< 1min";
+                g = currentCard.step == 1 ? "< 10min" : "1d";
+                e = "3d";
+                break;
+            case 2:
+                a = "< 10min";
+                g = "3d";
+                e = "5d";
+                break;
+            default:
+                return;
+        }
+
+        Button btnA = findViewById(R.id.button_again_study);
+        Button btnG = findViewById(R.id.button_good_study);
+        Button btnE = findViewById(R.id.button_easy_study);
+
+        a = a + "\nAgain";
+        g = g + "\nGood";
+        e = e + "\nEasy";
+
+        btnA.setText(a);
+        btnG.setText(g);
+        btnE.setText(e);
+    }
 }
