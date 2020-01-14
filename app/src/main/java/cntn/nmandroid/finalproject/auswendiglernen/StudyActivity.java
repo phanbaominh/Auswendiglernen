@@ -239,8 +239,7 @@ public class StudyActivity extends AppCompatActivity {
         webView.loadDataWithBaseURL("", html, mimeType, encoding, "");
     }
     private void finishDeck(String msg){
-        // TODO: revise this function: shouldn't this activity just close, giving control back to
-        //  the parent activity (MainActivity)
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setMessage(msg)
                 .setPositiveButton(android.R.string.yes,new DialogInterface.OnClickListener() {

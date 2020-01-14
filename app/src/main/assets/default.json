@@ -34,13 +34,86 @@
           "styling": ".card { color: black; };"
         }
       ]
+    },
+    {
+      "id": "3",
+      "name": "Kanji",
+      "fieldList": [
+        "kanji",
+        "keyword"
+      ],
+      "templateList": [
+        {
+          "templateFront": "<div class=\"front\" lang=\"ja\">\n\n<span class=\"large japanese\">{{kanji}}</span>\n\n</div>",
+          "templateBack": "<div class=\"back\" lang=\"ja\">\n<span class=\"large japanese\">{{kanji}}</span>\n\t<hr>\n\t<span class=\"medium\"><a href=\"http://jisho.org/kanji/details/{{kanji}}\">{{keyword}}</a></span></div>",
+          "styling": "div.front, div.back {\n\ttext-align: center;\n\tfont-family: sans-serif;\n\tfont-size: 16px; /* line height is based on this size in Anki for some reason, so start with the smallest size used */\n}\n\nspan.tiny {font-size: 16px;}\nspan.small {font-size: 24px;}\nspan.medium {font-size: 32px;}\nspan.large {font-size: 96px;}\nspan.italic {font-style: italic;}"
+        }
+      ]
     }
   ],
   "deckList": [
     {
       "id": "default",
       "name": "Default",
-      "noteList": []
+      "noteList": [
+        ]
+    },
+    {
+      "id": "weeb",
+      "name": "Kanji Study",
+      "noteList": [
+        {
+          "noteTypeId": "3",
+          "valueList": [
+            "一",
+            "one"
+          ],
+          "cardList": [
+            {}
+          ]
+        },
+        {
+          "noteTypeId": "3",
+          "valueList": [
+            "二",
+            "two"
+          ],
+          "cardList": [
+            {}
+          ]
+        },
+        {
+          "noteTypeId": "3",
+          "valueList": [
+            "三",
+            "three"
+          ],
+          "cardList": [
+            {}
+          ]
+        },
+        {
+          "noteTypeId": "3",
+          "valueList": [
+            "四",
+            "four"
+          ],
+          "cardList": [
+            {}
+          ]
+        },
+        {
+          "noteTypeId": "3",
+          "valueList": [
+            "五",
+            "five"
+          ],
+          "cardList": [
+            {}
+          ]
+        }
+      ]
+
     }
   ]
 }
