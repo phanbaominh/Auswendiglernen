@@ -57,91 +57,97 @@
                 />
 
         </LinearLayout>
-        <ViewSwitcher
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/viewswitcher_study"
-            android:inAnimation="@android:anim/slide_in_left"
-            android:outAnimation="@android:anim/slide_out_right"
+            android:orientation="vertical"
             >
-            <LinearLayout
+            <WebView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
-                <WebView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/webview_question_study"
-                    android:layout_weight="1"
-                    />
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/button_show_answer_study"
-                    android:layout_gravity="bottom"
-                    android:text="Show Answer"
-                    android:background="@android:color/darker_gray"
-                    android:onClick="onClickShowAnswer"
-                    />
-            </LinearLayout>
-            <LinearLayout
+                android:id="@+id/webview_question_study"
+                android:layout_weight="2"
+                />
+            <ViewSwitcher
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <WebView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/webview_question_answer_study"
-                    android:layout_weight="1"
-                    />
-                <WebView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/webview_answer_study"
-                    android:layout_weight="1"
-                    />
+                android:id="@+id/viewswitcher_study"
+                android:inAnimation="@android:anim/fade_in"
+                android:outAnimation="@android:anim/fade_out"
+                android:layout_weight="1"
+                >
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <Button
-                        android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@+id/button_again_study"
-                        android:text="1min\n Again"
-                        android:textColor="@android:color/white"
-                        android:textAllCaps="false"
-                        android:textStyle="normal"
                         android:layout_weight="1"
-                        android:background="#F14D4C"
-                        android:onClick="onClickAgain"/>
+                        />
                     <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:id="@+id/button_good_study"
-                        android:text="10min\n Good"
-                        android:textColor="@android:color/white"
-                        android:textAllCaps="false"
-                        android:textStyle="normal"
-                        android:layout_weight="1"
-                        android:background="#6ACE6E"
-                        android:onClick="onClickGood"/>
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:id="@+id/button_easy_study"
-                        android:text="4d\nEasy"
-                        android:textColor="@android:color/white"
-                        android:textAllCaps="false"
-                        android:textStyle="normal"
-                        android:layout_weight="1"
-                        android:background="#21C7FF"
-                        android:onClick="onClickEasy"/>
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/button_show_answer_study"
+                        android:layout_gravity="bottom"
+                        android:text="Show Answer"
+                        android:background="@android:color/darker_gray"
+                        android:onClick="onClickShowAnswer"
+                        />
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <WebView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/webview_answer_study"
+                        android:layout_weight="1"
+                        />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:id="@+id/button_again_study"
+                            android:text="1min\n Again"
+                            android:textColor="@android:color/white"
+                            android:textAllCaps="false"
+                            android:textStyle="normal"
+                            android:layout_weight="1"
+                            android:background="#F14D4C"
+                            android:onClick="onClickAgain"/>
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:id="@+id/button_good_study"
+                            android:text="10min\n Good"
+                            android:textColor="@android:color/white"
+                            android:textAllCaps="false"
+                            android:textStyle="normal"
+                            android:layout_weight="1"
+                            android:background="#6ACE6E"
+                            android:onClick="onClickGood"/>
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:id="@+id/button_easy_study"
+                            android:text="4d\nEasy"
+                            android:textColor="@android:color/white"
+                            android:textAllCaps="false"
+                            android:textStyle="normal"
+                            android:layout_weight="1"
+                            android:background="#21C7FF"
+                            android:onClick="onClickEasy"/>
+                    </LinearLayout>
 
-            </LinearLayout>
-        </ViewSwitcher>
+                </LinearLayout>
+            </ViewSwitcher>
+        </LinearLayout>
+
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView

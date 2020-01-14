@@ -100,7 +100,7 @@ public class StudyActivity extends AppCompatActivity {
 
             updateQuestionHtml(currentQueue);
             changeWebViewContent(R.id.webview_question_study, questionHtml);
-            changeWebViewContent(R.id.webview_question_answer_study, questionHtml);
+            //changeWebViewContent(R.id.webview_question_answer_study, questionHtml);
             viewSwitcher = findViewById(R.id.viewswitcher_study);
         }
     }
@@ -213,7 +213,7 @@ public class StudyActivity extends AppCompatActivity {
             viewSwitcher.showNext();
             updateQuestionHtml(currentQueue);
             changeWebViewContent(R.id.webview_question_study, questionHtml);
-            changeWebViewContent(R.id.webview_question_answer_study, questionHtml);
+            //changeWebViewContent(R.id.webview_question_answer_study, questionHtml);
             updateTextView();
         } else {
             finishDeck("You have finished studying");
