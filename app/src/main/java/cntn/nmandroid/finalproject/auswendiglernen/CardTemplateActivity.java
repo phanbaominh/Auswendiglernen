@@ -25,7 +25,10 @@ public class CardTemplateActivity extends AppCompatActivity {
 
     private int notetypeId;
     private ArrayList<CardTemplate> cardTemplateArrayList;
+    private ArrayList<String> spinnerItems;
     private EditText front,back,styling;
+    private Spinner spinnerCardTemplates;
+    private int currentCardTemplateId = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,13 +44,19 @@ public class CardTemplateActivity extends AppCompatActivity {
         notetypeId = intent.getIntExtra("notetypeId",0);
         Log.d("debug_getintextra", String.valueOf(notetypeId));
 
-        Spinner spinnerCardTemplates = findViewById(R.id.spinner_choose_card_id);
+        spinnerCardTemplates = findViewById(R.id.spinner_choose_card_id);
         createSpinner(spinnerCardTemplates,generateCardIdList(cardTemplateSize(notetypeId)));
 
         spinnerCardTemplates.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // truoc khi đổi thì lưu lại cái cũ
+                cardTemplateArrayList.get(currentCardTemplateId).setTemplateFront(front.getText().toString());
+                cardTemplateArrayList.get(currentCardTemplateId).setTemplateBack(back.getText().toString());
+                cardTemplateArrayList.get(currentCardTemplateId).setStyling(styling.getText().toString());
+
                 parseDataFromChosenCardTemplate(position);
+                currentCardTemplateId = position;
             }
 
             @Override
@@ -55,6 +64,7 @@ public class CardTemplateActivity extends AppCompatActivity {
 
             }
         });
+
 
         front = findViewById(R.id.editText_frontTemplate);
         back = findViewById(R.id.editText_backTemplate);
@@ -69,6 +79,11 @@ public class CardTemplateActivity extends AppCompatActivity {
         styling.setText(cardTemplateArrayList.get(cardId).getStyling());
         back.setText(cardTemplateArrayList.get(cardId).getTemplateBack());
     }
+    private void emptyDataFromChosenCardTemplate() {
+        front.setText("");
+        styling.setText("");
+        back.setText("");
+    }
 
 
     private String[] generateCardIdList(int size){
@@ -76,6 +91,7 @@ public class CardTemplateActivity extends AppCompatActivity {
         for(int i = 1; i<=size; i++) {
             strs.add("Card " + String.valueOf(i));
         }
+        spinnerItems = (ArrayList<String>)strs.clone();
         return strs.toArray(new String[strs.size()]);
     }
 
@@ -83,15 +99,16 @@ public class CardTemplateActivity extends AppCompatActivity {
     // và đổi lại createSpinner ở onCreate lấy thẳng size cho đỡ tối nghĩa.
     private int cardTemplateSize(int id){
         NoteType noteType = MainActivity.noteTypesArrayList.get(id);
-        cardTemplateArrayList = noteType.getTemplateList();
+        cardTemplateArrayList = (ArrayList<CardTemplate>) noteType.getTemplateList().clone();
+
         return cardTemplateArrayList.size();
     }
 
     private void createSpinner(Spinner spinner, String[] items){
 
-        ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item,items);
+        ArrayAdapter<String> adapterSpinner=new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item,items);
         //assign adapter to the Spinner
-        spinner.setAdapter(adapter);
+        spinner.setAdapter(adapterSpinner);
     }
 
 
@@ -107,24 +124,55 @@ public class CardTemplateActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        String lastId,newLastId;
         switch (item.getItemId()) {
             case R.id.actionbar_item_preview_card_template:
-                // showNoticeDialog();
+                // TODO: làm cái screen preview
                 break;
             case R.id.actionbar_item_finish_card_template:
-                // showNoticeDialog();
+
+                // Cho này save để phòng hờ item không có chuyển ._.
+                cardTemplateArrayList.get(currentCardTemplateId).setTemplateFront(front.getText().toString());
+                cardTemplateArrayList.get(currentCardTemplateId).setTemplateBack(back.getText().toString());
+                cardTemplateArrayList.get(currentCardTemplateId).setStyling(styling.getText().toString());
+
+                MainActivity.noteTypesArrayList.get(notetypeId).setTemplateList(cardTemplateArrayList);
+                onBackPressed();
                 break;
             case R.id.actionbar_item_add_card_template:
-                // showNoticeDialog();
+                CardTemplate cardTemplate;
+                if (cardTemplateArrayList.size() == 0){
+                    cardTemplate = new CardTemplate();
+                    newLastId = "1";
+                }
+                else{
+                    cardTemplate = new CardTemplate();
+                    cardTemplate.setStyling(cardTemplateArrayList.get(0).getStyling());
+                    cardTemplate.setTemplateBack(cardTemplateArrayList.get(0).getTemplateFront());
+                    cardTemplate.setTemplateFront(cardTemplateArrayList.get(0).getTemplateBack());
+                    lastId = spinnerItems.get(spinnerItems.size()-1);
+                    newLastId = String.valueOf(Integer.parseInt(lastId.split(" ")[1]) + 1 );
+                }
+
+                cardTemplateArrayList.add(cardTemplate);
+                spinnerItems.add("Card "+newLastId);
+                createSpinner(spinnerCardTemplates, spinnerItems.toArray(new String[spinnerItems.size()]));
                 break;
             case R.id.actionbar_item_delete_card_template:
-                // showNoticeDialog();
+
+                spinnerItems.remove(currentCardTemplateId);
+                createSpinner(spinnerCardTemplates, spinnerItems.toArray(new String[spinnerItems.size()]));
+                cardTemplateArrayList.remove(currentCardTemplateId);
+                if (cardTemplateArrayList.size() == 0){
+                    emptyDataFromChosenCardTemplate();
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
     @Override
     public boolean onSupportNavigateUp() {
+
         onBackPressed();
         return true;
     }
