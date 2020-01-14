@@ -2,6 +2,8 @@ package cntn.nmandroid.finalproject.auswendiglernen;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -24,14 +26,18 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class StudyActivity extends AppCompatActivity {
     private ActionBarDrawerToggle toggle;
     private ViewSwitcher viewSwitcher;
 
     private Deck deck;
-    private ArrayList<Card> cardArrayList;
+
     private int index;
     final String mimeType = "text/html";
     final String encoding = "UTF-8";
@@ -39,11 +45,23 @@ public class StudyActivity extends AppCompatActivity {
     private String answerHtml;
     private String css;
     private String deckName;
-
+    private Queue<Card> newQueue;
+    private Queue<Card> reviewQueue;
+    private Queue<Card> currentQueue;
+    private PriorityQueue<Card> learningQueue;
+    private Card currentCard = null;
+    private TextView textViewNew;
+    private TextView textViewLearning;
+    private TextView textViewReview;
+    private int currentQueueType = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_study);
+
+        textViewNew = findViewById(R.id.textview_new_card_study);
+        textViewLearning = findViewById(R.id.textview_learning_card_study);
+        textViewReview = findViewById(R.id.textview_review_card_study);
 
         deckName = getIntent().getStringExtra("deckName");
 
@@ -52,6 +70,7 @@ public class StudyActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         createNavigationDrawer();
 
+        ArrayList<Card> cardArrayList;
         deck = MainActivity.getDeckWithName(deckName);
         cardArrayList = deck.getCardList();
         index = 0;
@@ -59,11 +78,50 @@ public class StudyActivity extends AppCompatActivity {
         if (index >= cardArrayList.size()) {
             finishDeck("No notes in deck");
         } else {
-            updateQuestionHtml(index);
+            newQueue = deck.getNewQueue();
+            learningQueue = deck.getLearningQueue();
+            reviewQueue = deck.getReviewQueue();
+            if (reviewQueue.size() > 0) {
+                try {
+                    Log.d("review", "onCreate: " + reviewQueue.peek().toJSON().toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            currentQueue = getCurrentQueue();
+            if (currentQueue == null){
+                finishDeck("No new card to learn or review");
+                return;
+            }
+            updateTextView();
+
+            updateQuestionHtml(currentQueue);
             changeWebViewContent(R.id.webview_question_study, questionHtml);
             changeWebViewContent(R.id.webview_question_answer_study, questionHtml);
             viewSwitcher = findViewById(R.id.viewswitcher_study);
         }
+    }
+
+    private Queue<Card> getCurrentQueue() {
+        if (learningQueue.size() > 0 && learningQueue.peek().hasPassedDueDate()){
+            currentQueueType = 1;
+            return learningQueue;
+
+        }
+        if (reviewQueue.size() > 0){
+            currentQueueType = 2;
+            return   reviewQueue;
+        }
+        if (newQueue.size() > 0){
+            currentQueueType = 0;
+            return newQueue;
+        }
+        if (learningQueue.size() > 0){
+            currentQueueType = 1;
+            return learningQueue;
+        }
+        return null;
     }
 
     private void createNavigationDrawer() {
@@ -118,13 +176,13 @@ public class StudyActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_bar_study_editNote:
                 Intent editIntent = new Intent(this, AddNoteActivity.class);
-                editIntent.putExtra("noteId", cardArrayList.get(index).noteId);
+                editIntent.putExtra("noteId", currentCard.noteId);
                 editIntent.putExtra("deckName", deckName);
                 startActivity(editIntent);
                 finish();
                 break;
             case R.id.action_bar_study_deleteNote:
-                deck.deleteNoteById(cardArrayList.get(index).noteId);
+                deck.deleteNoteById(currentCard.noteId);
                 finish();
                 break;
         }
@@ -133,32 +191,47 @@ public class StudyActivity extends AppCompatActivity {
 
     public void onClickShowAnswer(View view) {
         viewSwitcher.showNext();
-        updateAnswerHtml(index);
+        currentQueue = getCurrentQueue();
+        updateAnswerHtml(currentQueue);
         changeWebViewContent(R.id.webview_answer_study, answerHtml);
     }
 
-    private void changeQuestion() {
-        if (++index < cardArrayList.size()) {
+    private void changeQuestion(int age) {
+        currentCard.updateState(age);
+        switch (currentCard.type){
+            case 0:
+                newQueue.add(currentCard);
+                break;
+            case 1:
+                learningQueue.add(currentCard);
+                break;
+        }
+        currentQueue = getCurrentQueue();
+        if (currentQueue != null) {
             viewSwitcher.showNext();
-            updateQuestionHtml(index);
+            updateQuestionHtml(currentQueue);
             changeWebViewContent(R.id.webview_question_study, questionHtml);
             changeWebViewContent(R.id.webview_question_answer_study, questionHtml);
+            updateTextView();
         }
         else{
             finishDeck("You have finished studying");
         }
     }
 
-    private void updateQuestionHtml(int i) {
-        questionHtml = cardArrayList.get(i).htmlFront;
-        css = "<style>" + cardArrayList.get(i).css + "</style>";
+    private void updateQuestionHtml(Queue<Card> cardArrayList) {
+        currentCard = cardArrayList.peek();
+        questionHtml = "<div class=\"card\">" + currentCard.htmlFront + "</div>";
+        css = "<style>" + currentCard.css + "</style>";
         questionHtml = css + questionHtml;
     }
 
-    private void updateAnswerHtml(int i) {
-        answerHtml = cardArrayList.get(i).htmlBack;
-        css = "<style>" + cardArrayList.get(i).css + "</style>";
+    private void updateAnswerHtml(Queue<Card> cardArrayList) {
+        Card card = cardArrayList.poll();
+        answerHtml = "<div class=\"card\">" + card.htmlBack + "</div>";
+        css = "<style>" + card.css + "</style>";
         answerHtml = css + answerHtml;
+
     }
 
     private void changeWebViewContent(int id, String html) {
@@ -183,15 +256,47 @@ public class StudyActivity extends AppCompatActivity {
     }
 
     public void onClickAgain(View view) {
-        changeQuestion();
+        changeQuestion(0);
     }
 
     public void onClickGood(View view) {
-        changeQuestion();
+        changeQuestion(1);
     }
 
     public void onClickEasy(View view) {
-        changeQuestion();
+        changeQuestion(2);
+    }
+
+    private void updateTextView(){
+        textViewNew.setText("New: " + String.valueOf(newQueue.size()) + " ");
+        textViewLearning.setText("Learning: " + String.valueOf(learningQueue.size()) + " ");
+        textViewReview.setText("Review: " + String.valueOf(reviewQueue.size()) + " ");
+
+        /*textViewNew.setTypeface(textViewNew.getTypeface(), Typeface.NORMAL);
+        textViewLearning.setTypeface(textViewLearning.getTypeface(), Typeface.NORMAL);
+        textViewReview.setTypeface(textViewReview.getTypeface(), Typeface.NORMAL);*/
+
+        textViewNew.setTextColor(Color.parseColor("#000000"));
+        textViewLearning.setTextColor(Color.parseColor("#000000"));
+        textViewReview.setTextColor(Color.parseColor("#000000"));
+
+        switch (currentQueueType) {
+            case 0:
+                changeTextColor(textViewNew);
+                //textViewNew.setTypeface(textViewNew.getTypeface(),Typeface.BOLD);
+                break;
+            case 1:
+                changeTextColor(textViewLearning);
+                //textViewLearning.setTypeface(textViewLearning.getTypeface(),Typeface.BOLD);
+                break;
+            case 2:
+                changeTextColor(textViewReview);
+                //textViewReview.setTypeface(textViewReview.getTypeface(),Typeface.BOLD);
+                break;
+        }
+    }
+    private void changeTextColor(TextView textView){
+        textView.setTextColor(Color.parseColor("#ff0000"));
     }
 
 }

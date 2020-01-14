@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class CardTemplate {
     private String templateFront;
@@ -48,6 +49,9 @@ public class CardTemplate {
         card.htmlFront = CommonParser.render(templateFront, fieldList, valueList);
         card.htmlBack = CommonParser.render(templateBack, fieldList, valueList);
         card.css = CommonParser.render(styling, fieldList, valueList);
+        card.type = 0;
+        card.step = 1;
+        card.dueDate = new Date();
         return card;
     }
 

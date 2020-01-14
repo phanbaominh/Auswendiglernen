@@ -13,7 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class Card {
+public class Card implements Comparable<Card> {
     public int step;
     public int type;
     public Date dueDate;
@@ -32,6 +32,7 @@ public class Card {
 
     /**
      * Check if a card has passed its due date
+     *
      * @return True/False whether the card has passed its due date
      */
     public boolean hasPassedDueDate() {
@@ -40,26 +41,33 @@ public class Card {
 
     /**
      * Update dueDate to NOW() + (a time interval)
-     * @param amount - Amount of time to add
+     *
+     * @param amount   - Amount of time to add
      * @param interval - Type of time interval: Card.DAYS | Card.HOURS | Card.MINUTES | Card.SECONDS
      */
     public void updateDueDate(int amount, int interval) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
 
         switch (interval) {
             case DAYS:
-                calendar.add(Calendar.DAY_OF_MONTH, amount);
-                break;
-            case HOURS:
-                calendar.add(Calendar.HOUR_OF_DAY, amount);
+                // <-- startOfDay(NOW() + DAYS)
+                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+                String str = formatter.format(new Date());
+                try {
+                    Date truncDate = formatter.parse(str);
+                    calendar.setTime(truncDate);
+                    calendar.add(Calendar.DAY_OF_MONTH, amount);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 break;
             case MINUTES:
+                // <-- NOW() + MINUTES
+                calendar.setTime(new Date());
                 calendar.add(Calendar.MINUTE, amount);
                 break;
-            case SECONDS:
-                calendar.add(Calendar.SECOND, amount);
-                break;
+            default:
+                return;
         }
 
         dueDate = calendar.getTime();
@@ -119,5 +127,46 @@ public class Card {
         obj.put("type", type);
         obj.put("dueDate", formatter.format(dueDate));
         return obj;
+    }
+
+    @Override
+    public int compareTo(Card card) {
+        return dueDate.compareTo(card.dueDate);
+    }
+
+    public void updateState(int age) {
+        // 0, 1, 2 <=> A, G, E
+        switch (age) {
+            case 0:
+                if (type <= 1) {
+                    updateDueDate(1, MINUTES);
+                    step = 1;
+                } else {
+                    updateDueDate(10, MINUTES);
+                    step = 2;
+                }
+                type = 1; // to learning queue
+                break;
+            case 1:
+                if (step == 1) {
+                    updateDueDate(10, MINUTES);
+                    step = 2;
+                    type = 1;
+                } else {
+                    updateDueDate(type == 1 ? 1 : 3, DAYS); // TODO: SJF
+                    step = 2;
+                    type = 2;
+                }
+                break;
+            case 2:
+                if (type <= 1) {
+                    updateDueDate(3, DAYS);
+                } else {
+                    updateDueDate(5, DAYS); // TODO: SJF
+                }
+                step = 2;
+                type = 2;
+                break;
+        }
     }
 }
