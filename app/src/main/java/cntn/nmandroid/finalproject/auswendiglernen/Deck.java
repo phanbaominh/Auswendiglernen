@@ -114,7 +114,9 @@ public class Deck {
                 break;
             }
         }
-        noteList.remove(index);
+        if (index != -1) {
+            noteList.remove(index);
+        }
     }
 
     public Note getNoteById(String noteId) {

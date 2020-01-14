@@ -183,6 +183,17 @@ public class CardBrowserActivity extends AppCompatActivity {
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.actionbar_listview_item_suspend:
+                        ArrayList<Note> noteToDeleteList = new ArrayList<>();
+                        for (int position : dataAdapter.getCurrentCheckedPosition()) {
+                            Note note = noteList.get(position);
+                            noteToDeleteList.add(note);
+                            String noteId = note.getId();
+                            for (Deck deck: MainActivity.deckArrayList) {
+                                deck.deleteNoteById(noteId);
+                            }
+                        }
+                        noteList.removeAll(noteToDeleteList);
+                        dataAdapter.notifyDataSetChanged();
                         break;
                 }
                 closeActionMode();
