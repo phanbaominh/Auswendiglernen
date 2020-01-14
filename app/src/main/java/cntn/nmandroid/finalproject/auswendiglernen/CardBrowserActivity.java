@@ -1,6 +1,5 @@
 package cntn.nmandroid.finalproject.auswendiglernen;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -62,6 +61,8 @@ public class CardBrowserActivity extends AppCompatActivity {
 
         initialiseDeckSpinner();
         initialiseNoteList();
+
+        Log.d("START", "Start");
     }
 
     private void intialiseAllDecks() {
@@ -141,6 +142,7 @@ public class CardBrowserActivity extends AppCompatActivity {
         } else {
             intialiseAllDecks();
         }
+        dataAdapter.notifyDataSetChanged();
     }
 
     private void createListView() {
@@ -164,6 +166,7 @@ public class CardBrowserActivity extends AppCompatActivity {
                     dataAdapter.removeSelection(position);
                 }
                 mode.setTitle(count + " selected");
+                mode.invalidate();
             }
 
             @Override
@@ -176,13 +179,31 @@ public class CardBrowserActivity extends AppCompatActivity {
 
             @Override
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                return false;
+                boolean enableEdit = dataAdapter.getCurrentCheckedPosition().size() == 1;
+                menu.findItem(R.id.actionbar_listview_item_edit).setVisible(enableEdit);
+                return true;
             }
 
             @Override
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
-                    case R.id.actionbar_listview_item_suspend:
+                    case R.id.actionbar_listview_item_edit:
+                        for (int position : dataAdapter.getCurrentCheckedPosition()) {
+                            String noteId = noteList.get(position).getId();
+
+                            // Find note's parent deck
+                            for (Deck deck : MainActivity.deckArrayList) {
+                                if (deck.getNoteById(noteId) != null) {
+                                    Intent editIntent = new Intent(CardBrowserActivity.this, AddNoteActivity.class);
+                                    editIntent.putExtra("noteId", noteId);
+                                    editIntent.putExtra("deckName", deck.getName());
+                                    startActivity(editIntent);
+                                    break;
+                                }
+                            }
+                        }
+                        break;
+                    case R.id.actionbar_listview_item_delete:
                         ArrayList<Note> noteToDeleteList = new ArrayList<>();
                         for (int position : dataAdapter.getCurrentCheckedPosition()) {
                             Note note = noteList.get(position);
