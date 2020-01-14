@@ -70,8 +70,14 @@ public class CardTemplateActivity extends AppCompatActivity {
         back = findViewById(R.id.editText_backTemplate);
         styling = findViewById(R.id.editText_styling);
 
-        //default là card 1
-        parseDataFromChosenCardTemplate(0);
+        if (cardTemplateArrayList.size() == 0){
+            emptyDataFromChosenCardTemplate();
+        }
+        else {
+            //default là card 1
+            parseDataFromChosenCardTemplate(0);
+        }
+
     }
 
     private void parseDataFromChosenCardTemplate(int cardId) {
@@ -130,12 +136,12 @@ public class CardTemplateActivity extends AppCompatActivity {
                 // TODO: làm cái screen preview
                 break;
             case R.id.actionbar_item_finish_card_template:
-
-                // Cho này save để phòng hờ item không có chuyển ._.
-                cardTemplateArrayList.get(currentCardTemplateId).setTemplateFront(front.getText().toString());
-                cardTemplateArrayList.get(currentCardTemplateId).setTemplateBack(back.getText().toString());
-                cardTemplateArrayList.get(currentCardTemplateId).setStyling(styling.getText().toString());
-
+                if (cardTemplateArrayList.size()  != 0){
+                    // Cho này save để phòng hờ item không có chuyển ._.
+                    cardTemplateArrayList.get(currentCardTemplateId).setTemplateFront(front.getText().toString());
+                    cardTemplateArrayList.get(currentCardTemplateId).setTemplateBack(back.getText().toString());
+                    cardTemplateArrayList.get(currentCardTemplateId).setStyling(styling.getText().toString());
+                }
                 MainActivity.noteTypesArrayList.get(notetypeId).setTemplateList(cardTemplateArrayList);
                 onBackPressed();
                 break;
@@ -157,6 +163,7 @@ public class CardTemplateActivity extends AppCompatActivity {
                 cardTemplateArrayList.add(cardTemplate);
                 spinnerItems.add("Card "+newLastId);
                 createSpinner(spinnerCardTemplates, spinnerItems.toArray(new String[spinnerItems.size()]));
+                parseDataFromChosenCardTemplate(0);
                 break;
             case R.id.actionbar_item_delete_card_template:
 
@@ -166,6 +173,11 @@ public class CardTemplateActivity extends AppCompatActivity {
                 if (cardTemplateArrayList.size() == 0){
                     emptyDataFromChosenCardTemplate();
                 }
+                else{
+                    parseDataFromChosenCardTemplate(0);
+                }
+                currentCardTemplateId = 0;
+
                 break;
         }
         return super.onOptionsItemSelected(item);
