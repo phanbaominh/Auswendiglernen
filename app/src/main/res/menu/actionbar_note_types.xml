@@ -6,6 +6,6 @@
         android:title="Add Note Types"
         app:showAsAction="ifRoom"
         android:iconTint="@color/colorOnPrimary"
-        android:icon="@android:drawable/ic_input_add"
+        android:icon="@drawable/add"
         />
 </menu>

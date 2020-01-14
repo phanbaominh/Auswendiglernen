@@ -19,7 +19,7 @@
         android:id="@+id/actionbar_item_add_card_template"
         android:title="Add"
         app:showAsAction="ifRoom"
-        android:icon="@android:drawable/ic_menu_add"
+        android:icon="@drawable/add"
         />
     <item
         android:id="@+id/actionbar_item_delete_card_template"
