@@ -78,13 +78,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onPause() {
+        super.onPause();
         try {
             DataWriter.save(this, noteTypesArrayList, deckArrayList);
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
-        super.onDestroy();
     }
 
     private void requestPermission(String permission) {
