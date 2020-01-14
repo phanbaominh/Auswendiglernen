@@ -39,6 +39,7 @@
   ],
   "deckList": [
     {
+      "id": "1",
       "name": "Deck #1",
       "noteList": [
         {
@@ -51,10 +52,14 @@
           ],
           "cardList": [
             {
-              "attr": "attr 1"
+              "step": 1,
+              "type": 0,
+              "dueDate": "14-01-2020, 00:18:25"
             },
             {
-              "attr": "attr 2"
+              "step": 1,
+              "type": 0,
+              "dueDate": "14-01-2020, 00:18:25"
             }
           ]
         },
@@ -67,13 +72,16 @@
           ],
           "cardList": [
             {
-              "attr": "attr 1"
+              "step": 1,
+              "type": 0,
+              "dueDate": "14-01-2020, 00:18:25"
             }
           ]
         }
       ]
     },
     {
+      "id": "2",
       "name": "Deck #2",
       "noteList": [
         {
@@ -86,10 +94,14 @@
           ],
           "cardList": [
             {
-              "attr": "attr 1"
+              "step": 1,
+              "type": 0,
+              "dueDate": "14-01-2020, 00:18:25"
             },
             {
-              "attr": "attr 2"
+              "step": 1,
+              "type": 0,
+              "dueDate": "14-01-2020, 00:18:25"
             }
           ]
         },
@@ -102,7 +114,9 @@
           ],
           "cardList": [
             {
-              "attr": "attr 1"
+              "step": 1,
+              "type": 0,
+              "dueDate": "14-01-2020, 00:18:25"
             }
           ]
         }

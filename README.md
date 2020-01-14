@@ -61,8 +61,11 @@ In the following parts, I will use `X[]` to refer to `ArrayList<X>`, where `X` i
       - `String htmlFront`: rendered `CardTemplate.templateFront` with `Note.valueList`.
       - `String htmlBack`: rendered `CardTemplate.templateBack` with `Note.valueList`.
       - `String css`: rendered `CardTemplate.styling` with `Note.valueList`.
-      - `String attr`: placeholder value for additional attributes (`learningState`, `dueTime`, etc).
-   2. Methods: None. All properties are public and thus can be accessed via the . operator.
+      - `int step, type`
+      - `Date dueDate`
+   2. Methods: no getters/setters, all properties are public and thus can be accessed via the . operator.
+      - `boolean hasPassedDueDate()`: check if the card has passed its due date or not.
+      - `void updateDueDate(int amount, int interval)`: update due date of a Card, refer to Card.java for more information.
 
 5. Deck
 
@@ -85,6 +88,9 @@ Everything is stored within 1 file: `default.json` or `data.json`.
 ## Structure
 
 Structure of the 2 files is the same and is as follows:
+
+<details>
+<summary>Click to expand</summary>
 
 ```
 {
@@ -128,9 +134,11 @@ Structure of the 2 files is the same and is as follows:
   ],
   "deckList": [
     {
+      "id": "1",
       "name": "Deck #1",
       "noteList": [
         {
+          "id": "1",
           "noteTypeId": "1",
           "valueList": [
             "front value",
@@ -139,14 +147,19 @@ Structure of the 2 files is the same and is as follows:
           ],
           "cardList": [
             {
-              "attr": "attr 1"
+              "step": 1,
+              "type": 0,
+              "dueDate": "14-01-2020, 00:18:25"
             },
             {
-              "attr": "attr 2"
+              "step": 1,
+              "type": 0,
+              "dueDate": "14-01-2020, 00:18:25"
             }
           ]
         },
         {
+          "id": "2",
           "noteTypeId": "2",
           "valueList": [
             "front value",
@@ -154,16 +167,20 @@ Structure of the 2 files is the same and is as follows:
           ],
           "cardList": [
             {
-              "attr": "attr 1"
+              "step": 1,
+              "type": 0,
+              "dueDate": "14-01-2020, 00:18:25"
             }
           ]
         }
       ]
     },
     {
+      "id": "2",
       "name": "Deck #2",
       "noteList": [
         {
+          "id": "3",
           "noteTypeId": "1",
           "valueList": [
             "front value 123",
@@ -172,14 +189,19 @@ Structure of the 2 files is the same and is as follows:
           ],
           "cardList": [
             {
-              "attr": "attr 1"
+              "step": 1,
+              "type": 0,
+              "dueDate": "14-01-2020, 00:18:25"
             },
             {
-              "attr": "attr 2"
+              "step": 1,
+              "type": 0,
+              "dueDate": "14-01-2020, 00:18:25"
             }
           ]
         },
         {
+          "id": "4",
           "noteTypeId": "2",
           "valueList": [
             "front value 123",
@@ -187,7 +209,9 @@ Structure of the 2 files is the same and is as follows:
           ],
           "cardList": [
             {
-              "attr": "attr 1"
+              "step": 1,
+              "type": 0,
+              "dueDate": "14-01-2020, 00:18:25"
             }
           ]
         }
@@ -197,9 +221,11 @@ Structure of the 2 files is the same and is as follows:
 }
 ```
 
+</details>
+
 ## Notes
 
-Cards are represented only by `attr` (which is a placeholder for actual value such as `learningState` or `dueTime`). The other attributes (`htmlFront`, `htmlBack`, `css`) are generated everytime they are called.
+Cards are represented only by `step, type, dueDate`. Other attributes (`htmlFront`, `htmlBack`, `css`) are generated everytime they are called.
 
 ## Methods
 
