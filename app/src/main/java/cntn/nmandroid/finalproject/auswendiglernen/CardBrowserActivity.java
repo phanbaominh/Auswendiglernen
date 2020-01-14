@@ -325,6 +325,7 @@ public class CardBrowserActivity extends AppCompatActivity {
 
     private void createSpinnerActionBar(Spinner spinner, ArrayList<String> items) {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_in_action_bar, items);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_actionbar);
         spinner.setAdapter(adapter);
     }
 }
