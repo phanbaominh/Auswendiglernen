@@ -40,6 +40,7 @@ public class NoteTypeActivity extends AppCompatActivity
         updateNumberOfNotetypesOnActionBar();
 
         createListView();
+        Log.d("debug", "vao ne");
     }
 
     private void updateNumberOfNotetypesOnActionBar() {
@@ -48,6 +49,7 @@ public class NoteTypeActivity extends AppCompatActivity
         TextView tv = this.findViewById(R.id.actionbar_item_count_note_types);
         tv.setText(String.format("%d note types available", MainActivity.noteTypesArrayList.size()));
     }
+
 
     private void createListView(){
         //dataArrayList = new ArrayList<>();

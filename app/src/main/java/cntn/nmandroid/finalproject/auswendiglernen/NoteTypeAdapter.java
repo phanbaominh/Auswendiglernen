@@ -1,6 +1,7 @@
 package cntn.nmandroid.finalproject.auswendiglernen;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,14 @@ public class NoteTypeAdapter extends ArrayAdapter<NoteType> {
         TextView textViewName = view.findViewById(R.id.textview_listview_name_note_types);
         TextView textViewCount = view.findViewById(R.id.textview_listview_count_note_types);
         textViewName.setText(noteType.getName());
-
+        MainActivity.createAllNoteArrayList();
+        int count = 0;
+        for (Note nt: MainActivity.allNoteArrayList){
+            if (noteType.getName().equals(nt.getNoteType().getName())){
+                count++;
+            }
+        }
+        textViewCount.setText(String.valueOf(count) + " notes");
     }
     private View createViewWithLayout(int layoutID) {
         return LayoutInflater.from(this.context).inflate(layoutID, null);
