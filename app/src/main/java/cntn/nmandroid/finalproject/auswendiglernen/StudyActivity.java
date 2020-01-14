@@ -271,31 +271,31 @@ public class StudyActivity extends AppCompatActivity {
         textViewLearning.setText("Learning: " + String.valueOf(learningQueue.size()) + " ");
         textViewReview.setText("Review: " + String.valueOf(reviewQueue.size()) + " ");
 
-        /*textViewNew.setTypeface(textViewNew.getTypeface(), Typeface.NORMAL);
+        textViewNew.setTypeface(textViewNew.getTypeface(), Typeface.NORMAL);
         textViewLearning.setTypeface(textViewLearning.getTypeface(), Typeface.NORMAL);
-        textViewReview.setTypeface(textViewReview.getTypeface(), Typeface.NORMAL);*/
+        textViewReview.setTypeface(textViewReview.getTypeface(), Typeface.NORMAL);
 
-        textViewNew.setTextColor(Color.parseColor("#000000"));
-        textViewLearning.setTextColor(Color.parseColor("#000000"));
-        textViewReview.setTextColor(Color.parseColor("#000000"));
+        textViewNew.setTextColor(getResources().getColor(R.color.colorOnPrimary,null));
+        textViewLearning.setTextColor(getResources().getColor(R.color.colorOnPrimary,null));
+        textViewReview.setTextColor(getResources().getColor(R.color.colorOnPrimary,null));
 
         switch (currentQueueType) {
             case 0:
                 changeTextColor(textViewNew);
-                //textViewNew.setTypeface(textViewNew.getTypeface(),Typeface.BOLD);
+                textViewNew.setTypeface(textViewNew.getTypeface(),Typeface.BOLD);
                 break;
             case 1:
                 changeTextColor(textViewLearning);
-                //textViewLearning.setTypeface(textViewLearning.getTypeface(),Typeface.BOLD);
+                textViewLearning.setTypeface(textViewLearning.getTypeface(),Typeface.BOLD);
                 break;
             case 2:
                 changeTextColor(textViewReview);
-                //textViewReview.setTypeface(textViewReview.getTypeface(),Typeface.BOLD);
+                textViewReview.setTypeface(textViewReview.getTypeface(),Typeface.BOLD);
                 break;
         }
     }
     private void changeTextColor(TextView textView){
-        textView.setTextColor(Color.parseColor("#ff0000"));
+        textView.setTextColor(Color.parseColor("#007f00"));
     }
 
 }
