@@ -1,19 +1,12 @@
 package cntn.nmandroid.finalproject.auswendiglernen;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -24,11 +17,7 @@ import java.util.ArrayList;
 public class CardTemplateActivity extends AppCompatActivity {
 
     private int notetypeId;
-    private ArrayList<CardTemplate> cardTemplateArrayList;
-    private ArrayList<String> spinnerItems;
-    private EditText front,back,styling;
-    private Spinner spinnerCardTemplates;
-    private int currentCardTemplateId = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +33,7 @@ public class CardTemplateActivity extends AppCompatActivity {
         notetypeId = intent.getIntExtra("notetypeId",0);
         Log.d("debug_getintextra", String.valueOf(notetypeId));
 
-        spinnerCardTemplates = findViewById(R.id.spinner_choose_card_id);
+        Spinner spinnerCardTemplates = findViewById(R.id.spinner_choose_card_id);
         createSpinner(spinnerCardTemplates,generateCardIdList(cardTemplateSize(notetypeId)));
 
         spinnerCardTemplates.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -89,6 +78,7 @@ public class CardTemplateActivity extends AppCompatActivity {
         front.setText("");
         styling.setText("");
         back.setText("");
+
     }
 
 
@@ -97,36 +87,22 @@ public class CardTemplateActivity extends AppCompatActivity {
         for(int i = 1; i<=size; i++) {
             strs.add("Card " + String.valueOf(i));
         }
-        spinnerItems = (ArrayList<String>)strs.clone();
         return strs.toArray(new String[strs.size()]);
     }
-
-    // Ban đầu tạo để lấy size, nhưng sau đó đổi lại có lưu lại nên sau này refactor có thể xóa và
-    // và đổi lại createSpinner ở onCreate lấy thẳng size cho đỡ tối nghĩa.
     private int cardTemplateSize(int id){
         NoteType noteType = MainActivity.noteTypesArrayList.get(id);
-        cardTemplateArrayList = (ArrayList<CardTemplate>) noteType.getTemplateList().clone();
-
+        ArrayList<CardTemplate> cardTemplateArrayList = noteType.getTemplateList();
         return cardTemplateArrayList.size();
     }
 
     private void createSpinner(Spinner spinner, String[] items){
 
-        ArrayAdapter<String> adapterSpinner=new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item,items);
+        ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item,items);
         //assign adapter to the Spinner
-        spinner.setAdapter(adapterSpinner);
+        spinner.setAdapter(adapter);
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-
-        MenuInflater menuInflater = this.getMenuInflater();
-        menuInflater.inflate(R.menu.actionbar_edit_card_template, menu);
-
-        return super.onCreateOptionsMenu(menu);
-    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -183,8 +159,8 @@ public class CardTemplateActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     @Override
-    public boolean onSupportNavigateUp() {
 
+    public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
     }
