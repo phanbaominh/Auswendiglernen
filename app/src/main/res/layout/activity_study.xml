@@ -21,6 +21,35 @@
                 android:layout_height="match_parent"
                 android:id="@+id/textview_deck_name_actionbar"/>
         </androidx.appcompat.widget.Toolbar>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@android:color/holo_blue_light"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text ="New: 0"
+                android:id="@+id/textview_new_card_study"
+                android:textColor="@android:color/white"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text ="Learning: 0"
+                android:id="@+id/textview_learning_card_study"
+                android:textColor="@android:color/white"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text ="Review: 0"
+                android:id="@+id/textview_review_card_study"
+                android:textColor="@android:color/white"
+                />
+
+        </LinearLayout>
         <ViewSwitcher
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -51,7 +51,7 @@ public class Card implements Comparable<Card> {
         switch (interval) {
             case DAYS:
                 // <-- startOfDay(NOW() + DAYS)
-                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-YYYY", Locale.ENGLISH);
+                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
                 String str = formatter.format(new Date());
                 try {
                     Date truncDate = formatter.parse(str);
