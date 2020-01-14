@@ -6,6 +6,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textview_listview_field_add_note"
+        android:textColor="@color/colorOnWhite"
+        android:textSize="18sp"
         android:text="Field"/>
     <LinearLayout
         android:layout_width="match_parent"

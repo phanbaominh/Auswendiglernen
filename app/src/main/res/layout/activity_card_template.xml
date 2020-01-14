@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         android:theme="@style/ThemeOverlay.AppCompat.Dark" >
     </androidx.appcompat.widget.Toolbar>
     <Spinner
@@ -27,6 +28,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorOnWhite"
             android:text="Front template"/>
 
         <EditText
@@ -40,6 +42,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorOnWhite"
             android:text="Styling"/>
 
         <EditText
@@ -53,6 +56,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorOnWhite"
             android:text="Back template"/>
 
         <EditText
