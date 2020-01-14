@@ -33,9 +33,14 @@ public class DeckAdapter extends ArrayAdapter<Deck> {
     }
 
     private void linkDeck(Deck deck, final View view,final int pos) {
-
+        int countNew = deck.getNewQueue().size();
+        int countLearning = deck.getLearningQueue().size();
+        int countReview = deck.getReviewQueue().size();
         TextView textViewTitle = view.findViewById(R.id.textview_listview_item_main);
+        TextView textViewCount = view.findViewById(R.id.textview_listview_count_main);
         textViewTitle.setText(deck.getName());
+        textViewCount.setText("New: " + countNew + "  " + "Learning: " + countLearning + "  " + "Review: " + countReview + "  ");
+
 
     }
     private View createViewWithLayout(int layoutID) {

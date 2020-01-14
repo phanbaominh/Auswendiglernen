@@ -10,11 +10,18 @@
 
     <TextView
         android:id="@+id/textview_listview_item_main"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
         android:text="Default"
         android:textStyle="bold"
         android:textSize="20sp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textview_listview_count_main"
+        android:textSize="16sp"
+        android:text="N:0 L:0 R:0"/>
+
 
 </LinearLayout>

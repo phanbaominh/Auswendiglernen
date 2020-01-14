@@ -162,7 +162,7 @@ public class Deck {
         ArrayList<Card> cardList = getCardList();
 
         for (Card card: cardList) {
-            if (card.hasPassedDueDate() && card.type == 1) {
+            if (card.type == 1) {
                 pq.offer(card);
             }
         }
