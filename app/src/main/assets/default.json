@@ -5,122 +5,42 @@
       "name": "Basic",
       "fieldList": [
         "front",
-        "back",
-        "page"
+        "back"
       ],
       "templateList": [
         {
-          "templateFront": "Front: {{front}}. Page: {{page}}",
-          "templateBack": "Back: {{back}}",
-          "styling": ".card { color: red; };"
-        },
-        {
           "templateFront": "{{front}}",
           "templateBack": "{{back}}",
-          "styling": ".card { color: blue; };"
+          "styling": ".card { color: black; };"
         }
       ]
     },
     {
       "id": "2",
-      "name": "Basic 2",
+      "name": "Basic (and reversed)",
       "fieldList": [
         "front",
         "back"
       ],
       "templateList": [
         {
-          "templateFront": "Front: {{front}}",
-          "templateBack": "Back: {{back}}",
-          "styling": ".card { color: red; };"
+          "templateFront": "{{front}}",
+          "templateBack": "{{back}}",
+          "styling": ".card { color: black; };"
+        },
+        {
+          "templateFront": "{{back}}",
+          "templateBack": "{{front}}",
+          "styling": ".card { color: black; };"
         }
       ]
     }
   ],
   "deckList": [
     {
-      "id": "1",
-      "name": "Deck #1",
-      "noteList": [
-        {
-          "id": "1",
-          "noteTypeId": "1",
-          "valueList": [
-            "front value",
-            "back value",
-            "page number"
-          ],
-          "cardList": [
-            {
-              "step": 1,
-              "type": 0,
-              "dueDate": "14-01-2020, 00:18:25"
-            },
-            {
-              "step": 1,
-              "type": 0,
-              "dueDate": "14-01-2020, 00:18:25"
-            }
-          ]
-        },
-        {
-          "id": "2",
-          "noteTypeId": "2",
-          "valueList": [
-            "front value",
-            "back value"
-          ],
-          "cardList": [
-            {
-              "step": 1,
-              "type": 0,
-              "dueDate": "14-01-2020, 00:18:25"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "2",
-      "name": "Deck #2",
-      "noteList": [
-        {
-          "id": "3",
-          "noteTypeId": "1",
-          "valueList": [
-            "front value 123",
-            "back value 123",
-            "page number 123"
-          ],
-          "cardList": [
-            {
-              "step": 1,
-              "type": 0,
-              "dueDate": "14-01-2020, 00:18:25"
-            },
-            {
-              "step": 1,
-              "type": 0,
-              "dueDate": "14-01-2020, 00:18:25"
-            }
-          ]
-        },
-        {
-          "id": "4",
-          "noteTypeId": "2",
-          "valueList": [
-            "front value 123",
-            "back value 123"
-          ],
-          "cardList": [
-            {
-              "step": 1,
-              "type": 0,
-              "dueDate": "14-01-2020, 00:18:25"
-            }
-          ]
-        }
-      ]
+      "id": "default",
+      "name": "Default",
+      "noteList": []
     }
   ]
 }

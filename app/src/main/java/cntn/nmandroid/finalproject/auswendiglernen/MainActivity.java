@@ -39,7 +39,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
-            implements NameDialogFragment.NameDialogListener{
+            implements NameDialogFragment.NameDialogListener {
     public static DeckAdapter dataAdapter;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity
 
     private int dialogMarker = 0;
     private int currentPosition = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity
 
         if (isInit) {
             setUpData();
-            isInit=false;
+            isInit = false;
         }
 
         Toolbar toolbar = findViewById(R.id.toolbar_main);
@@ -76,9 +77,19 @@ public class MainActivity extends AppCompatActivity
         requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
+    @Override
+    protected void onDestroy() {
+        try {
+            DataWriter.save(this, noteTypesArrayList, deckArrayList);
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+        super.onDestroy();
+    }
+
     private void requestPermission(String permission) {
         if (checkSelfPermission(permission) == PackageManager.PERMISSION_DENIED) {
-            requestPermissions(new String[] { permission }, PERMISSION_REQUEST_CODE);
+            requestPermissions(new String[]{permission}, PERMISSION_REQUEST_CODE);
         }
     }
 
@@ -95,7 +106,7 @@ public class MainActivity extends AppCompatActivity
         createAllNoteArrayList();
     }
 
-    private void createListView(){
+    private void createListView() {
 
         dataAdapter = new DeckAdapter(this, deckArrayList);
         ListView listView = findViewById(R.id.listview_main);
@@ -107,27 +118,27 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Intent intent = new Intent(MainActivity.this, StudyActivity.class);
-                intent.putExtra("deckName",deckArrayList.get(position).getName());
+                intent.putExtra("deckName", deckArrayList.get(position).getName());
                 startActivity(intent);
             }
         });
     }
-    private void createNavigationDrawer(){
-        drawerLayout = (DrawerLayout)findViewById(R.id.activity_main);
-        toggle = new ActionBarDrawerToggle(this, drawerLayout,R.string.Open, R.string.Close);
+
+    private void createNavigationDrawer() {
+        drawerLayout = (DrawerLayout) findViewById(R.id.activity_main);
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.Open, R.string.Close);
 
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        nagivationView = (NavigationView)findViewById(R.id.navview_main);
+        nagivationView = (NavigationView) findViewById(R.id.navview_main);
         nagivationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
-                switch(id)
-                {
+                switch (id) {
                     case R.id.navbar_item_deck_main:
                         break;
                     case R.id.navbar_item_card_browser_main: {
@@ -136,7 +147,8 @@ public class MainActivity extends AppCompatActivity
                         break;
                     }
                     case R.id.navbar_item_settings_main:
-                        Toast.makeText(MainActivity.this, "Settings",Toast.LENGTH_SHORT).show();break;
+                        Toast.makeText(MainActivity.this, "Settings", Toast.LENGTH_SHORT).show();
+                        break;
                     default:
                         return true;
                 }
@@ -144,6 +156,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = this.getMenuInflater();
@@ -153,7 +166,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(toggle.onOptionsItemSelected(item))
+        if (toggle.onOptionsItemSelected(item))
             return true;
         switch (item.getItemId()) {
             case R.id.actionbar_item_import:
@@ -233,6 +246,7 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
+
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
@@ -248,15 +262,20 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.context_menu_item_rename_main:
                 dialogMarker = 1;
-                showNameDialog();
+                showNameDialog("Enter deck's new name");
 
                 break;
         }
         return super.onContextItemSelected(item);
     }
-    public void showNameDialog() {
+
+    public void showNameDialog(String name) {
         // Create an instance of the dialog fragment and show it
         DialogFragment dialog = new NameDialogFragment();
+        Bundle args = new Bundle();
+        args.putString("title", name);
+        dialog.setArguments(args);
+
         dialog.show(getSupportFragmentManager(), "NameDialogFragment");
 
 
@@ -274,22 +293,21 @@ public class MainActivity extends AppCompatActivity
         Boolean end = false;
         // find notetype
         NoteType baseNoteType = null;
-        for(Deck deck : MainActivity.deckArrayList) {
+        for (Deck deck : MainActivity.deckArrayList) {
 
             // if exists, do nothing
-            if (deck.getName().equals(et.getText().toString())){
+            if (deck.getName().equals(et.getText().toString())) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this)
                         .setMessage("Already existed deck with that name")
-                        .setPositiveButton(android.R.string.yes,new DialogInterface.OnClickListener() {
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 // Continue with delete operation
                                 dialog.dismiss();
                             }
-                        })
-                        ;
+                        });
                 end = true;
             }
-            if (end){
+            if (end) {
                 return;
             }
 
@@ -298,9 +316,7 @@ public class MainActivity extends AppCompatActivity
             Deck newDeck = new Deck(et.getText().toString());
             // add it
             MainActivity.deckArrayList.add(newDeck);
-        }
-        else
-        {
+        } else {
             deckArrayList.get(currentPosition).setName(et.getText().toString());
         }
         dataAdapter.notifyDataSetChanged();
@@ -313,37 +329,39 @@ public class MainActivity extends AppCompatActivity
 
     public void onClickFABAddDeck(View view) {
         dialogMarker = 0;
-        showNameDialog();
+        showNameDialog("Enter deck's name");
     }
 
-    public static String[] getDeckListName(){
+    public static String[] getDeckListName() {
         ArrayList<String> nameList = new ArrayList<>();
-        for(Deck deck : MainActivity.deckArrayList) {
+        for (Deck deck : MainActivity.deckArrayList) {
             nameList.add(deck.getName());
         }
         return nameList.toArray(new String[nameList.size()]);
     }
-    public static Deck getDeckWithName(String name){
-        for (Deck deck: MainActivity.deckArrayList){
-            if (deck.getName().equals(name)){
+
+    public static Deck getDeckWithName(String name) {
+        for (Deck deck : MainActivity.deckArrayList) {
+            if (deck.getName().equals(name)) {
                 return deck;
             }
         }
         return null;
     }
-    public static String[] getNoteTypeListName(){
+
+    public static String[] getNoteTypeListName() {
         ArrayList<String> strs = new ArrayList<String>();
-        for(NoteType noteType : noteTypesArrayList) {
+        for (NoteType noteType : noteTypesArrayList) {
             strs.add(noteType.getName());
         }
         return strs.toArray(new String[strs.size()]);
     }
-    public static void createAllNoteArrayList(){
+
+    public static void createAllNoteArrayList() {
         allNoteArrayList.clear();
-        for (Deck deck: deckArrayList){
+        for (Deck deck : deckArrayList) {
             allNoteArrayList.addAll(deck.getNoteList());
         }
 
     }
 }
-
