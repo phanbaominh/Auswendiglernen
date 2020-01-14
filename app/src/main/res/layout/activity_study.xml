@@ -104,35 +104,40 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
+                    android:orientation="horizontal">
                     <Button
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
                         android:id="@+id/button_again_study"
-                        android:text="Again"
+                        android:text="1min\n Again"
+                        android:textColor="@android:color/white"
+                        android:textAllCaps="false"
+                        android:textStyle="normal"
                         android:layout_weight="1"
-                        android:background="@android:color/holo_red_dark"
-                        android:onClick="onClickAgain"
-                        />
+                        android:background="#F14D4C"
+                        android:onClick="onClickAgain"/>
                     <Button
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
                         android:id="@+id/button_good_study"
-                        android:text="Good"
+                        android:text="10min\n Good"
+                        android:textColor="@android:color/white"
+                        android:textAllCaps="false"
+                        android:textStyle="normal"
                         android:layout_weight="1"
-                        android:background="@android:color/holo_green_light"
-                        android:onClick="onClickGood"
-                        />
+                        android:background="#6ACE6E"
+                        android:onClick="onClickGood"/>
                     <Button
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
                         android:id="@+id/button_easy_study"
-                        android:text="Easy"
+                        android:text="4d\nEasy"
+                        android:textColor="@android:color/white"
+                        android:textAllCaps="false"
+                        android:textStyle="normal"
                         android:layout_weight="1"
-                        android:background="@android:color/holo_blue_bright"
-                        android:onClick="onClickEasy"
-                        />
+                        android:background="#21C7FF"
+                        android:onClick="onClickEasy"/>
                 </LinearLayout>
 
             </LinearLayout>
