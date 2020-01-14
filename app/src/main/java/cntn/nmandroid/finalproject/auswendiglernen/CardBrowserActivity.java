@@ -83,7 +83,7 @@ public class CardBrowserActivity extends AppCompatActivity {
         }
 
         final Spinner spinner = findViewById(R.id.spinner_actionbar_card_browser);
-        createSpinner(spinner, deckList);
+        createSpinnerActionBar(spinner, deckList);
 
         deckSpinnerInitialised = false;
 
@@ -320,6 +320,11 @@ public class CardBrowserActivity extends AppCompatActivity {
 
     private void createSpinner(Spinner spinner, ArrayList<String> items) {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, items);
+        spinner.setAdapter(adapter);
+    }
+
+    private void createSpinnerActionBar(Spinner spinner, ArrayList<String> items) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_in_action_bar, items);
         spinner.setAdapter(adapter);
     }
 }

@@ -14,12 +14,14 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/textview_listview_question_card_browser"
+            android:textColor="@color/colorOnWhite"
             android:layout_weight="1"
             />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/textview_listview_field_card_browser"
+            android:textColor="@color/colorOnWhite"
             android:layout_weight="1"
             />
     </LinearLayout>

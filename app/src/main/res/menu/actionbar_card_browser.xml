@@ -11,6 +11,7 @@
         android:id="@+id/actionbar_item_add_card_browser"
         app:showAsAction="ifRoom"
         android:title="Add"
+        android:iconTint="@color/colorOnPrimary"
         android:icon="@android:drawable/ic_input_add"
         />
 

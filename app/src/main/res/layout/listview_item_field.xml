@@ -6,5 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/textview_field_name_field"
+        android:textColor="@color/colorOnWhite"
+        android:textSize="20sp"
         />
 </LinearLayout>
