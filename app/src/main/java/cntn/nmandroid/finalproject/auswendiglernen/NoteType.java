@@ -25,9 +25,7 @@ public class NoteType {
     public String getName() {
         return name;
     }
-    public void setFieldList(ArrayList<String> newFieldList){
-        fieldList = new ArrayList<>(newFieldList);
-    }
+
     public ArrayList<String> getFieldList() {
         return fieldList;
     }
@@ -37,7 +35,12 @@ public class NoteType {
 
     // Setters
     public void setName(String newName){name = newName;}
-
+    public void setFieldList(ArrayList<String> newFieldList){
+        fieldList = new ArrayList<>(newFieldList);
+    }
+    public void setTemplateList(ArrayList<CardTemplate> newTemplateList){
+        templateList = new ArrayList<>(newTemplateList);
+    }
     // Constructors
     private NoteType() {
     }
