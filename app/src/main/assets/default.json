@@ -63,6 +63,7 @@
       "name": "Kanji Study",
       "noteList": [
         {
+          "id": "1",
           "noteTypeId": "3",
           "valueList": [
             "一",
@@ -73,6 +74,7 @@
           ]
         },
         {
+          "id": "2",
           "noteTypeId": "3",
           "valueList": [
             "二",
@@ -83,6 +85,7 @@
           ]
         },
         {
+          "id": "3",
           "noteTypeId": "3",
           "valueList": [
             "三",
@@ -93,6 +96,7 @@
           ]
         },
         {
+          "id": "4",
           "noteTypeId": "3",
           "valueList": [
             "四",
@@ -103,6 +107,7 @@
           ]
         },
         {
+          "id": "5",
           "noteTypeId": "3",
           "valueList": [
             "五",

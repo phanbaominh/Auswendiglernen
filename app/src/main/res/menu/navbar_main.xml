@@ -3,7 +3,7 @@
     <item android:id="@+id/navbar_item_deck_main"
         android:title="Decks"/>
     <item android:id="@+id/navbar_item_card_browser_main"
-        android:title="Card Browser"/>
+        android:title="Notes Browser"/>
     <item android:id="@+id/navbar_item_settings_main"
         android:title="Settings"/>
 
