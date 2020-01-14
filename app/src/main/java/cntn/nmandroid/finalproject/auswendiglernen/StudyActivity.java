@@ -193,7 +193,6 @@ public class StudyActivity extends AppCompatActivity {
 
     public void onClickShowAnswer(View view) {
         viewSwitcher.showNext();
-        currentQueue = getCurrentQueue();
         updateAnswerHtml(currentQueue);
         changeWebViewContent(R.id.webview_answer_study, answerHtml);
     }
@@ -210,6 +209,7 @@ public class StudyActivity extends AppCompatActivity {
         }
         currentQueue = getCurrentQueue();
         if (currentQueue != null) {
+
             viewSwitcher.showNext();
             updateQuestionHtml(currentQueue);
             changeWebViewContent(R.id.webview_question_study, questionHtml);
