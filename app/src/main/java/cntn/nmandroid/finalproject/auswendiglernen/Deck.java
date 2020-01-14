@@ -7,7 +7,10 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.UUID;
 
 public class Deck {
@@ -124,5 +127,44 @@ public class Deck {
             }
         }
         return null;
+    }
+
+    public Queue<Card> getNewQueue() {
+        Queue<Card> queue = new LinkedList<>();
+        ArrayList<Card> cardList = getCardList();
+
+        for (Card card: cardList) {
+            if (card.hasPassedDueDate() && card.type == 0) {
+                queue.offer(card);
+            }
+        }
+
+        return queue;
+    }
+
+    public Queue<Card> getReviewQueue() {
+        Queue<Card> queue = new LinkedList<>();
+        ArrayList<Card> cardList = getCardList();
+
+        for (Card card: cardList) {
+            if (card.hasPassedDueDate() && card.type == 2) {
+                queue.offer(card);
+            }
+        }
+
+        return queue;
+    }
+
+    public PriorityQueue<Card> getLearningQueue() {
+        PriorityQueue<Card> pq = new PriorityQueue<>();
+        ArrayList<Card> cardList = getCardList();
+
+        for (Card card: cardList) {
+            if (card.hasPassedDueDate() && card.type == 1) {
+                pq.offer(card);
+            }
+        }
+
+        return pq;
     }
 }

@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
@@ -27,7 +28,7 @@ public class Note {
         this.noteType = noteType;
     }
     public ArrayList<Card> getCardList() {
-        ArrayList<Card> ans = (ArrayList<Card>)this.cardList.clone();
+        ArrayList<Card> ans = this.cardList;
         for (int i = 0; i < noteType.getTemplateList().size(); ++i) {
             CardTemplate tpl = noteType.getTemplateList().get(i);
             Card renderedCard = tpl.render(noteType.getFieldList(), valueList);
@@ -46,6 +47,11 @@ public class Note {
 
     public void resetCardsLearningState() {
         // TODO: reset cards' learning state after the parent note is edited.
+        for (Card card: this.cardList) {
+            card.type = 0;
+            card.step = 1;
+            card.dueDate = new Date();
+        }
     }
 
     private Note() {
