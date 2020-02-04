@@ -40,17 +40,6 @@ public class AddNoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
 
-        try {
-            CharSequence text = getIntent()
-                    .getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT);
-            textFromIntent = text.toString();
-        }
-        catch (Exception e){
-            // Để không xảy ra việc giữ mãi text.
-            textFromIntent = null;
-
-        }
-
         createSpinner();
 
         noteId = getIntent().getStringExtra("noteId");
@@ -126,6 +115,9 @@ public class AddNoteActivity extends AppCompatActivity {
                     // Create
                     currentDeck.addNode(newNote);
                 }
+
+
+                textFromIntent = null;
                 finish();
                 break;
             default:
@@ -136,6 +128,7 @@ public class AddNoteActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
+        textFromIntent = null;
         onBackPressed();
         return true;
     }

@@ -67,6 +67,15 @@ public class MainActivity extends AppCompatActivity
             setUpData();
             isInit = false;
         }
+        try {
+            CharSequence text = getIntent()
+                    .getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT);
+            AddNoteActivity.textFromIntent = text.toString();
+            Intent intent = new Intent(MainActivity.this, AddNoteActivity.class);
+            startActivity(intent);
+        }
+        catch (Exception e){
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
