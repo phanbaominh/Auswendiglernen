@@ -1,6 +1,8 @@
 package cntn.nmandroid.finalproject.auswendiglernen;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,11 +32,21 @@ public class AddNoteActivity extends AppCompatActivity {
     // NoteID == null: is creating a new note.
     private String noteId;
     private Note oldNote;
+    public static String textFromIntent = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
+
+        try {
+            CharSequence text = getIntent()
+                    .getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT);
+            textFromIntent = text.toString();
+        }
+        catch (Exception e){
+
+        }
 
         createSpinner();
 

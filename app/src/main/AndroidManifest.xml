@@ -21,7 +21,15 @@
         </activity>
         <activity android:name=".CardBrowserActivity" />
         <activity android:name=".NoteTypeActivity" />
-        <activity android:name=".AddNoteActivity" />
+        <activity android:name=".AddNoteActivity"
+
+            android:label="@string/process_text_action_name">
+        <intent-filter>
+            <action android:name="android.intent.action.PROCESS_TEXT" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <data android:mimeType="text/plain" />
+        </intent-filter>
+        </activity>
         <activity android:name=".StudyActivity" />
         <activity android:name=".FieldActivity" />
     </application>
