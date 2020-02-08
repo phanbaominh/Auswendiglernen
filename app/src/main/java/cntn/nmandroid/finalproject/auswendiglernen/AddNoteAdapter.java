@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 public class AddNoteAdapter extends ArrayAdapter<String> {
     private Context context;
-
     public AddNoteAdapter(Context context, ArrayList<String> stringArrayList) {
         super(context, 0, stringArrayList);
         this.context = context;
@@ -39,6 +38,9 @@ public class AddNoteAdapter extends ArrayAdapter<String> {
         TextView textViewField = view.findViewById(R.id.textview_listview_field_add_note);
         EditText editText = view.findViewById(R.id.edittext_listview_field_value_add_note);
         textViewField.setText(string);
+        if (AddNoteActivity.textFromIntent != null && string.equals("front")) {
+            editText.setText(AddNoteActivity.textFromIntent);
+        }
         ImageButton button = view.findViewById(R.id.button_listview_attach_media_add_note);
         button.setOnClickListener(new View.OnClickListener() {
             @Override

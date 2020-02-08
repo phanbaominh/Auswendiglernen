@@ -1,6 +1,8 @@
 package cntn.nmandroid.finalproject.auswendiglernen;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -11,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +33,7 @@ public class AddNoteActivity extends AppCompatActivity {
     // NoteID == null: is creating a new note.
     private String noteId;
     private Note oldNote;
+    public static String textFromIntent = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +115,9 @@ public class AddNoteActivity extends AppCompatActivity {
                     // Create
                     currentDeck.addNode(newNote);
                 }
+
+
+                textFromIntent = null;
                 finish();
                 break;
             default:
@@ -121,6 +128,7 @@ public class AddNoteActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
+        textFromIntent = null;
         onBackPressed();
         return true;
     }
