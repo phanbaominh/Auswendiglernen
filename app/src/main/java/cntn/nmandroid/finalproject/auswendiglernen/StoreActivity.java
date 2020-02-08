@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,6 +32,7 @@ public class StoreActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         
         createNavigationDrawer();
+        initialiseDeckList();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -82,5 +84,14 @@ public class StoreActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    private void initialiseDeckList() {
+        ArrayList<Deck> deckList = new ArrayList<>();
+        StoreDeckAdapter deckAdapter = new StoreDeckAdapter(this, deckList);
+        StoreFetch.QueryDeckList(deckList, deckAdapter);
+
+        ListView listView = findViewById(R.id.deck_list);
+        listView.setAdapter(deckAdapter);
     }
 }

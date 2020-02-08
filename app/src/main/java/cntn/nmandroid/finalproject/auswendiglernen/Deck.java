@@ -14,24 +14,29 @@ import java.util.Queue;
 import java.util.UUID;
 
 public class Deck {
-    private String id;
-    private String name;
-    private ArrayList<Note> noteList;
+    protected String id;
+    protected String name;
+    protected ArrayList<Note> noteList;
 
     public String getId() {
         return id;
+    }
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
 
     public ArrayList<Note> getNoteList() {
         return noteList;
+    }
+    public void setNoteList(ArrayList<Note> noteList) {
+        this.noteList = noteList;
     }
 
     public ArrayList<Card> generateCardList() {
@@ -46,7 +51,7 @@ public class Deck {
         noteList.add(newNote);
     }
 
-    private Deck() {
+    protected Deck() {
     }
 
     public Deck(String name) {
