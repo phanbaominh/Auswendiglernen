@@ -1,7 +1,7 @@
 {
   "typeList": [
     {
-      "id": "1",
+      "id": "8eeb47d5-f75d-4b58-872a-8bcd016403dd",
       "name": "Basic",
       "fieldList": [
         "front",
@@ -16,7 +16,7 @@
       ]
     },
     {
-      "id": "2",
+      "id": "bfbb4188-f9fb-4fc8-9d12-024a0e0088a9",
       "name": "Basic (and reversed)",
       "fieldList": [
         "front",
@@ -36,7 +36,7 @@
       ]
     },
     {
-      "id": "3",
+      "id": "f574e916-bce0-4717-818c-2dae1dd0ce2e",
       "name": "Kanji",
       "fieldList": [
         "kanji",
@@ -53,18 +53,17 @@
   ],
   "deckList": [
     {
-      "id": "default",
+      "id": "ca38cbee-5233-479b-b56d-2dbc456e0ae4",
       "name": "Default",
-      "noteList": [
-        ]
+      "noteList": []
     },
     {
-      "id": "weeb",
+      "id": "f5f458a6-0c67-411f-9ef5-20232a230006",
       "name": "Kanji Study",
       "noteList": [
         {
-          "id": "1",
-          "noteTypeId": "3",
+          "id": "aa9c5cd9-0d72-4f68-bfac-27d50fbb8eb1",
+          "noteTypeId": "f574e916-bce0-4717-818c-2dae1dd0ce2e",
           "valueList": [
             "一",
             "one"
@@ -74,8 +73,8 @@
           ]
         },
         {
-          "id": "2",
-          "noteTypeId": "3",
+          "id": "fc01b5fe-840f-4fd4-97f5-dba921bbe9c5",
+          "noteTypeId": "f574e916-bce0-4717-818c-2dae1dd0ce2e",
           "valueList": [
             "二",
             "two"
@@ -85,8 +84,8 @@
           ]
         },
         {
-          "id": "3",
-          "noteTypeId": "3",
+          "id": "93308351-8b89-4762-8fc3-8ed339ad75b3",
+          "noteTypeId": "f574e916-bce0-4717-818c-2dae1dd0ce2e",
           "valueList": [
             "三",
             "three"
@@ -96,8 +95,8 @@
           ]
         },
         {
-          "id": "4",
-          "noteTypeId": "3",
+          "id": "b2225c7e-c60a-4530-b6e9-83743ab34ded",
+          "noteTypeId": "f574e916-bce0-4717-818c-2dae1dd0ce2e",
           "valueList": [
             "四",
             "four"
@@ -107,8 +106,8 @@
           ]
         },
         {
-          "id": "5",
-          "noteTypeId": "3",
+          "id": "f98d2048-d163-48c2-ab3d-1e09ae379288",
+          "noteTypeId": "f574e916-bce0-4717-818c-2dae1dd0ce2e",
           "valueList": [
             "五",
             "five"
