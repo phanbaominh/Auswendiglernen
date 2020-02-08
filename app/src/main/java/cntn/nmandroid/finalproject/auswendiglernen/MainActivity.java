@@ -382,6 +382,23 @@ public class MainActivity extends AppCompatActivity
         for (Deck deck : deckArrayList) {
             allNoteArrayList.addAll(deck.getNoteList());
         }
+    }
 
+    public static Deck queryDeckById(String id) {
+        for (Deck deck: deckArrayList) {
+            if (deck.getId().equals(id)) {
+                return deck;
+            }
+        }
+        return null;
+    }
+
+    public static NoteType queryTypeById(String id) {
+        for (NoteType type: noteTypesArrayList) {
+            if (type.getId().equals(id)) {
+                return type;
+            }
+        }
+        return null;
     }
 }
