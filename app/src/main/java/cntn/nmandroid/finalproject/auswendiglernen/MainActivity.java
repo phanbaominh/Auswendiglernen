@@ -274,8 +274,11 @@ public class MainActivity extends AppCompatActivity
                 createAllNoteArrayList();
                 dataAdapter.notifyDataSetChanged();
                 break;
+            case R.id.context_menu_item_publish_main:
+                Deck deck = deckArrayList.get(info.position);
+                StoreFetch.InsertDeck(deck);
+                break;
             case R.id.context_menu_item_options_main:
-
                 break;
             case R.id.context_menu_item_rename_main:
                 dialogMarker = 1;

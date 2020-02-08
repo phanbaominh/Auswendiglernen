@@ -11,9 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
@@ -74,15 +72,15 @@ public class StudyActivity extends AppCompatActivity {
 
         ArrayList<Card> cardArrayList;
         deck = MainActivity.getDeckWithName(deckName);
-        cardArrayList = deck.getCardList();
+        cardArrayList = deck.generateCardList();
         index = 0;
 
         if (index >= cardArrayList.size()) {
             finishDeck("No notes in deck");
         } else {
-            newQueue = deck.getNewQueue();
-            learningQueue = deck.getLearningQueue();
-            reviewQueue = deck.getReviewQueue();
+            newQueue = deck.queryNewQueue();
+            learningQueue = deck.queryLearningQueue();
+            reviewQueue = deck.queryReviewQueue();
             if (reviewQueue.size() > 0) {
                 try {
                     Log.d("review", "onCreate: " + reviewQueue.peek().toJSON().toString());
