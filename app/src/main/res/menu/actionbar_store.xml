@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/actionbar_item_placeholder_store"
+        android:title="Placeholder"
+        android:iconTint="@color/colorOnPrimary"
+        app:showAsAction="always"/>
+</menu>

@@ -280,6 +280,10 @@ public class CardBrowserActivity extends AppCompatActivity {
                         break;
                     case R.id.navbar_item_card_browser_main:
                         break;
+                    case R.id.navbar_item_store_main:
+                        Intent intent2 = new Intent(CardBrowserActivity.this, StoreActivity.class);
+                        startActivity(intent2);
+                        break;
                     case R.id.navbar_item_settings_main:
                         Toast.makeText(CardBrowserActivity.this, "Settings", Toast.LENGTH_SHORT).show();
                         break;

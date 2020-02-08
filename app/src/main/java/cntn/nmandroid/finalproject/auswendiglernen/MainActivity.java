@@ -159,6 +159,10 @@ public class MainActivity extends AppCompatActivity
                         startActivity(intent);
                         break;
                     }
+                    case R.id.navbar_item_store_main:
+                        Intent intent2 = new Intent(MainActivity.this, StoreActivity.class);
+                        startActivity(intent2);
+                        break;
                     case R.id.navbar_item_settings_main:
                         Toast.makeText(MainActivity.this, "Settings", Toast.LENGTH_SHORT).show();
                         break;

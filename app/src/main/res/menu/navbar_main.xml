@@ -4,6 +4,8 @@
         android:title="Decks"/>
     <item android:id="@+id/navbar_item_card_browser_main"
         android:title="Notes Browser"/>
+    <item android:id="@+id/navbar_item_store_main"
+        android:title="Store"/>
     <item android:id="@+id/navbar_item_settings_main"
         android:title="Settings"/>
 
