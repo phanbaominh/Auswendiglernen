@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -89,9 +90,10 @@ public class StoreActivity extends AppCompatActivity {
     private void initialiseDeckList() {
         ArrayList<Deck> deckList = new ArrayList<>();
         StoreDeckAdapter deckAdapter = new StoreDeckAdapter(this, deckList);
-        StoreFetch.QueryDeckList(deckList, deckAdapter);
+        StoreFetch.QueryDeckList(deckList, deckAdapter,this);
 
         ListView listView = findViewById(R.id.deck_list);
         listView.setAdapter(deckAdapter);
+
     }
 }
