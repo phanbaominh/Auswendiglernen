@@ -4,15 +4,15 @@
         android:title="Default"
         android:id="@+id/context_menu_item_title_main" />
     <item
+        android:title="Publish to store"
+        android:id="@+id/context_menu_item_publish_main" />
+    <item
         android:title="Options"
-        android:id="@+id/context_menu_item_options_main"
-        />
+        android:id="@+id/context_menu_item_options_main" />
     <item
         android:title="Delete"
-        android:id="@+id/context_menu_item_delete_main"
-        />
+        android:id="@+id/context_menu_item_delete_main" />
     <item
         android:title="Rename"
-        android:id="@+id/context_menu_item_rename_main"
-        />
+        android:id="@+id/context_menu_item_rename_main" />
 </menu>

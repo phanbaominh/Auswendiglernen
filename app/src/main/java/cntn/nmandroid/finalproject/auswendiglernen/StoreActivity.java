@@ -2,9 +2,13 @@ package cntn.nmandroid.finalproject.auswendiglernen;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AbsListView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,9 +32,10 @@ public class StoreActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(false);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setTitle("Online Store");
         
         createNavigationDrawer();
+        initialiseDeckList();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -45,6 +50,9 @@ public class StoreActivity extends AppCompatActivity {
         if (toggle.onOptionsItemSelected(item))
             return true;
         switch (item.getItemId()) {
+            case R.id.store_action_refresh:
+                firstFetch(this);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -80,6 +88,62 @@ public class StoreActivity extends AppCompatActivity {
                         return true;
                 }
                 return true;
+            }
+        });
+    }
+
+    private boolean isLoading;
+    private ArrayList<StoreDeck> deckList;
+    private StoreDeckAdapter deckAdapter;
+
+    private void firstFetch(final StoreActivity ctx) {
+        deckList.clear();
+        deckAdapter.notifyDataSetChanged();
+        ctx.findViewById(R.id.loading_panel_store).setVisibility(View.VISIBLE);
+        isLoading = true;
+        StoreFetch.Initialise();
+        StoreFetch.QueryDeckList(deckList, new Callback() {
+            @Override
+            public void run() {
+                deckAdapter.notifyDataSetChanged();
+                ctx.findViewById(R.id.loading_panel_store).setVisibility(View.GONE);
+                isLoading = false;
+            }
+        });
+    }
+
+    private void initialiseDeckList() {
+        deckList = new ArrayList<>();
+        deckAdapter = new StoreDeckAdapter(this, deckList);
+        final StoreActivity context = this;
+        firstFetch(this);
+
+        ListView listView = findViewById(R.id.deck_list);
+        listView.setAdapter(deckAdapter);
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (isLoading) {
+                    return;
+                }
+
+                Log.d("scroll", (totalItemCount  - visibleItemCount) + " " + (firstVisibleItem + StoreFetch.PAGE_SIZE));
+                if (totalItemCount - visibleItemCount <= firstVisibleItem + StoreFetch.PAGE_SIZE) {
+                    isLoading = true;
+                    StoreFetch.QueryDeckList(deckList, new Callback() {
+                        @Override
+                        public void run() {
+                            isLoading = false;
+                            deckAdapter.notifyDataSetChanged();
+                            context.findViewById(R.id.loading_panel_store).setVisibility(View.GONE);
+                        }
+                    });
+                }
             }
         });
     }

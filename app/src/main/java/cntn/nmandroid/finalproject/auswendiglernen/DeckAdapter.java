@@ -1,7 +1,6 @@
 package cntn.nmandroid.finalproject.auswendiglernen;
 
 import android.content.Context;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,9 +32,9 @@ public class DeckAdapter extends ArrayAdapter<Deck> {
     }
 
     private void linkDeck(Deck deck, final View view,final int pos) {
-        int countNew = deck.getNewQueue().size();
-        int countLearning = deck.getLearningQueue().size();
-        int countReview = deck.getReviewQueue().size();
+        int countNew = deck.queryNewQueue().size();
+        int countLearning = deck.queryLearningQueue().size();
+        int countReview = deck.queryReviewQueue().size();
         TextView textViewTitle = view.findViewById(R.id.textview_listview_item_main);
         TextView textViewCount = view.findViewById(R.id.textview_listview_count_main);
         textViewTitle.setText(deck.getName());

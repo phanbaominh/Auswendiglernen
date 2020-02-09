@@ -1,8 +1,6 @@
 package cntn.nmandroid.finalproject.auswendiglernen;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,7 +43,7 @@ public class AddNoteActivity extends AppCompatActivity {
         if (noteId != null) {
             String deckName = getIntent().getStringExtra("deckName");
             Deck deck = MainActivity.getDeckWithName(deckName);
-            Note note = deck.getNoteById(noteId);
+            Note note = deck.queryNoteById(noteId);
             oldNote = note;
 
             int deckIndex = MainActivity.deckArrayList.indexOf(deck);

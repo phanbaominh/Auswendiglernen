@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity
             implements NameDialogFragment.NameDialogListener {
@@ -117,6 +118,15 @@ public class MainActivity extends AppCompatActivity
         noteTypesArrayList = dataPair.first;
         allNoteArrayList = new ArrayList<Note>();
         createAllNoteArrayList();
+
+//        String originalId = deckArrayList.get(1).getId();
+//        for (int i = 0; i < 30; ++i) {
+//            Deck deck = deckArrayList.get(1);
+//            deck.setId(String.valueOf(UUID.randomUUID()));
+//            deck.setName("Kanji " + (i + 1));
+//            StoreFetch.InsertDeck(deck, this);
+//        }
+//        deckArrayList.get(1).setId(originalId);
     }
 
     private void createListView() {
@@ -256,6 +266,9 @@ public class MainActivity extends AppCompatActivity
 
             Deck obj = (Deck) listView.getItemAtPosition(acmi.position);
             MenuItem item = menu.findItem(R.id.context_menu_item_title_main);
+            if (acmi.position == 0) {
+                menu.findItem(R.id.context_menu_item_publish_main).setEnabled(false);
+            }
 
             SpannableString s = new SpannableString(obj.getName());
             s.setSpan(new ForegroundColorSpan(Color.RED), 0, s.length(), 0);
@@ -274,8 +287,11 @@ public class MainActivity extends AppCompatActivity
                 createAllNoteArrayList();
                 dataAdapter.notifyDataSetChanged();
                 break;
+            case R.id.context_menu_item_publish_main:
+                Deck deck = deckArrayList.get(info.position);
+                StoreFetch.InsertDeck(deck,this);
+                break;
             case R.id.context_menu_item_options_main:
-
                 break;
             case R.id.context_menu_item_rename_main:
                 dialogMarker = 1;
@@ -294,8 +310,6 @@ public class MainActivity extends AppCompatActivity
         dialog.setArguments(args);
 
         dialog.show(getSupportFragmentManager(), "NameDialogFragment");
-
-
     }
 
     // The dialog fragment receives a reference to this Activity through the
@@ -379,6 +393,23 @@ public class MainActivity extends AppCompatActivity
         for (Deck deck : deckArrayList) {
             allNoteArrayList.addAll(deck.getNoteList());
         }
+    }
 
+    public static Deck queryDeckById(String id) {
+        for (Deck deck: deckArrayList) {
+            if (deck.getId().equals(id)) {
+                return deck;
+            }
+        }
+        return null;
+    }
+
+    public static NoteType queryTypeById(String id) {
+        for (NoteType type: noteTypesArrayList) {
+            if (type.getId().equals(id)) {
+                return type;
+            }
+        }
+        return null;
     }
 }

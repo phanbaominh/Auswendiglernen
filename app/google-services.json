@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "17098702455",
+    "firebase_url": "https://auswendiglernen-ed55f.firebaseio.com",
+    "project_id": "auswendiglernen-ed55f",
+    "storage_bucket": "auswendiglernen-ed55f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:17098702455:android:ed24593f581ee554475072",
+        "android_client_info": {
+          "package_name": "cntn.nmandroid.finalproject.auswendiglernen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "17098702455-su6cqmqka04redoieq9k09kmhg9dgke6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAErAIB6erbqjo1YD_sC4cQs9T33JhoJ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "17098702455-su6cqmqka04redoieq9k09kmhg9dgke6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

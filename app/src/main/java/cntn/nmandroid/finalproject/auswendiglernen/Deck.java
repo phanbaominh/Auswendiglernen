@@ -14,18 +14,20 @@ import java.util.Queue;
 import java.util.UUID;
 
 public class Deck {
-    private String id;
-    private String name;
-    private ArrayList<Note> noteList;
+    protected String id;
+    protected String name;
+    protected ArrayList<Note> noteList;
 
     public String getId() {
         return id;
+    }
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -33,24 +35,23 @@ public class Deck {
     public ArrayList<Note> getNoteList() {
         return noteList;
     }
+    public void setNoteList(ArrayList<Note> noteList) {
+        this.noteList = noteList;
+    }
 
-    public ArrayList<Card> getCardList() {
-        ArrayList<Card> cardArrayList = new ArrayList<Card>();
+    public ArrayList<Card> generateCardList() {
+        ArrayList<Card> cardArrayList = new ArrayList<>();
         for (Note note : noteList) {
             cardArrayList.addAll(note.getCardList());
         }
         return cardArrayList;
     }
 
-    public void setNoteList(ArrayList<Note> noteList) {
-        this.noteList = noteList;
-    }
-
     public void addNode(Note newNote) {
         noteList.add(newNote);
     }
 
-    private Deck() {
+    protected Deck() {
     }
 
     public Deck(String name) {
@@ -122,7 +123,7 @@ public class Deck {
         }
     }
 
-    public Note getNoteById(String noteId) {
+    public Note queryNoteById(String noteId) {
         for (int i = 0; i < noteList.size(); ++i) {
             if (noteList.get(i).getId().equals(noteId)) {
                 return noteList.get(i);
@@ -131,9 +132,9 @@ public class Deck {
         return null;
     }
 
-    public Queue<Card> getNewQueue() {
+    public Queue<Card> queryNewQueue() {
         Queue<Card> queue = new LinkedList<>();
-        ArrayList<Card> cardList = getCardList();
+        ArrayList<Card> cardList = generateCardList();
 
         for (Card card: cardList) {
             if (card.hasPassedDueDate() && card.type == 0) {
@@ -144,9 +145,9 @@ public class Deck {
         return queue;
     }
 
-    public Queue<Card> getReviewQueue() {
+    public Queue<Card> queryReviewQueue() {
         Queue<Card> queue = new LinkedList<>();
-        ArrayList<Card> cardList = getCardList();
+        ArrayList<Card> cardList = generateCardList();
 
         for (Card card: cardList) {
             if (card.hasPassedDueDate() && card.type == 2) {
@@ -157,9 +158,9 @@ public class Deck {
         return queue;
     }
 
-    public PriorityQueue<Card> getLearningQueue() {
+    public PriorityQueue<Card> queryLearningQueue() {
         PriorityQueue<Card> pq = new PriorityQueue<>();
-        ArrayList<Card> cardList = getCardList();
+        ArrayList<Card> cardList = generateCardList();
 
         for (Card card: cardList) {
             if (card.type == 1) {

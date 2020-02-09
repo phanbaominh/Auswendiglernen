@@ -193,7 +193,7 @@ public class CardBrowserActivity extends AppCompatActivity {
 
                             // Find note's parent deck
                             for (Deck deck : MainActivity.deckArrayList) {
-                                if (deck.getNoteById(noteId) != null) {
+                                if (deck.queryNoteById(noteId) != null) {
                                     Intent editIntent = new Intent(CardBrowserActivity.this, AddNoteActivity.class);
                                     editIntent.putExtra("noteId", noteId);
                                     editIntent.putExtra("deckName", deck.getName());
