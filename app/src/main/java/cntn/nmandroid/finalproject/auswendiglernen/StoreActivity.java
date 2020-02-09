@@ -88,12 +88,11 @@ public class StoreActivity extends AppCompatActivity {
     }
 
     private void initialiseDeckList() {
-        ArrayList<Deck> deckList = new ArrayList<>();
+        ArrayList<StoreDeck> deckList = new ArrayList<>();
         StoreDeckAdapter deckAdapter = new StoreDeckAdapter(this, deckList);
         StoreFetch.QueryDeckList(deckList, deckAdapter,this);
 
         ListView listView = findViewById(R.id.deck_list);
         listView.setAdapter(deckAdapter);
-
     }
 }

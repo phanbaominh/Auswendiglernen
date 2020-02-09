@@ -1,9 +1,11 @@
 package cntn.nmandroid.finalproject.auswendiglernen;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -27,35 +29,39 @@ public class StoreFetch {
         ref.child("types").child(type.getId()).setValue(type);
     }
 
-    static public void InsertDeck(DeckWithTimestamp deck, final Activity activity) {
+    static public void InsertDeck(Deck deck, final Activity activity) {
         activity.findViewById(R.id.progress_bar_main).setVisibility(View.VISIBLE);
-        for (Note note: deck.getNoteList()) {
+        for (Note note : deck.getNoteList()) {
             InsertType(note.getNoteType());
         }
         DatabaseReference ref = db.getReference();
-        ref.child("decks").child(deck.getId()).setValue(deck,new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(DatabaseError firebaseError, DatabaseReference firebase) {
-                if (firebaseError != null) {
-                    System.out.println("Data could not be saved. " + firebaseError.getMessage());
-                } else {
-                    activity.findViewById(R.id.progress_bar_main).setVisibility(View.GONE);
-                }
-            }
-        });
+        ref.child("deck-names").child(deck.getId()).setValue(new StoreDeck(deck));
+        ref.child("decks")
+                .child(deck.getId())
+                .setValue(deck, new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(DatabaseError firebaseError, DatabaseReference firebase) {
+                        if (firebaseError != null) {
+                            Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
+                            Log.e("FIREBASE", firebaseError.getMessage());
+                        } else {
+                            activity.findViewById(R.id.progress_bar_main).setVisibility(View.GONE);
+                        }
+                    }
+                });
         //activity.findViewById(R.id.loading_panel_store).setVisibility(View.GONE);
     }
 
-    static public void QueryDeckList(final ArrayList<Deck> deckList, final StoreDeckAdapter adapter, final Activity activity) {
+    static public void QueryDeckList(final ArrayList<StoreDeck> deckList, final StoreDeckAdapter adapter, final Activity activity) {
         DatabaseReference ref = db.getReference();
 
-        ref.child("decks")
+        ref.child("deck-names")
                 .orderByChild("createAt")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot singleSnapshot: dataSnapshot.getChildren()) {
-                    DeckWithTimestamp deck = singleSnapshot.getValue(DeckWithTimestamp.class);
+                    StoreDeck deck = singleSnapshot.getValue(StoreDeck.class);
                     deckList.add(deck);
                 }
 

@@ -276,7 +276,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.context_menu_item_publish_main:
                 Deck deck = deckArrayList.get(info.position);
-                StoreFetch.InsertDeck(new DeckWithTimestamp(deck),this);
+                StoreFetch.InsertDeck(deck,this);
                 break;
             case R.id.context_menu_item_options_main:
                 break;
