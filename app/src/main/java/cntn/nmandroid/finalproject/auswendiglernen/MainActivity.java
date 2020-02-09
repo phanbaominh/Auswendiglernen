@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity
             implements NameDialogFragment.NameDialogListener {
@@ -117,6 +118,15 @@ public class MainActivity extends AppCompatActivity
         noteTypesArrayList = dataPair.first;
         allNoteArrayList = new ArrayList<Note>();
         createAllNoteArrayList();
+
+//        String originalId = deckArrayList.get(1).getId();
+//        for (int i = 0; i < 30; ++i) {
+//            Deck deck = deckArrayList.get(1);
+//            deck.setId(String.valueOf(UUID.randomUUID()));
+//            deck.setName("Kanji " + (i + 1));
+//            StoreFetch.InsertDeck(deck, this);
+//        }
+//        deckArrayList.get(1).setId(originalId);
     }
 
     private void createListView() {

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,18 +39,23 @@ public class StoreDeckAdapter extends ArrayAdapter<StoreDeck> {
 
         TextView deckName = convertView.findViewById(R.id.deck_name);
         TextView deckCount = convertView.findViewById(R.id.deck_card_count);
-        Button downloadBtn = convertView.findViewById(R.id.deck_download_btn);
+        final Button downloadBtn = convertView.findViewById(R.id.deck_download_btn);
+        final RelativeLayout loader = convertView.findViewById(R.id.deck_loading);
 
         final StoreDeck meta = getItem(position);
         int cardCount = meta.getCardCount();
         String msg = cardCount + " card" + (cardCount == 1 ? "" : "s");
 
+        loader.setVisibility(View.GONE);
         if (MainActivity.queryDeckById(meta.getId()) != null) {
             downloadBtn.setVisibility(View.INVISIBLE);
         } else {
+            downloadBtn.setVisibility(View.VISIBLE);
             downloadBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    downloadBtn.setVisibility(View.GONE);
+                    loader.setVisibility(View.VISIBLE);
                     FirebaseDatabase.getInstance().getReference("decks").child(meta.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -66,6 +72,7 @@ public class StoreDeckAdapter extends ArrayAdapter<StoreDeck> {
                             }
                             MainActivity.deckArrayList.add(deck);
                             Toast.makeText(context, "Download finished", Toast.LENGTH_SHORT).show();
+                            loader.setVisibility(View.GONE);
                         }
 
                         @Override

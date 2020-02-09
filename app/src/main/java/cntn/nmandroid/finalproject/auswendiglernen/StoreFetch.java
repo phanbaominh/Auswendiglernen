@@ -1,16 +1,12 @@
 package cntn.nmandroid.finalproject.auswendiglernen;
 
 import android.app.Activity;
-import android.app.Application;
-import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.google.firebase.FirebaseError;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,10 +15,14 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import static androidx.constraintlayout.widget.Constraints.TAG;
-
 public class StoreFetch {
     static private FirebaseDatabase db = FirebaseDatabase.getInstance();
+    static private long lastTimestamp = 0;
+    static final int PAGE_SIZE = 10;
+
+    static public void Initialise() {
+        lastTimestamp = 0;
+    }
 
     static public void InsertType(NoteType type) {
         DatabaseReference ref = db.getReference();
@@ -52,21 +52,30 @@ public class StoreFetch {
         //activity.findViewById(R.id.loading_panel_store).setVisibility(View.GONE);
     }
 
-    static public void QueryDeckList(final ArrayList<StoreDeck> deckList, final StoreDeckAdapter adapter, final Activity activity) {
+    static public void QueryDeckList(final ArrayList<StoreDeck> deckList, final Callback onFinish) {
         DatabaseReference ref = db.getReference();
 
         ref.child("deck-names")
-                .orderByChild("createAt")
+                .orderByChild("createdAt")
+                .startAt(lastTimestamp)
+                .limitToFirst(PAGE_SIZE + 1)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int count = 0;
                 for (DataSnapshot singleSnapshot: dataSnapshot.getChildren()) {
                     StoreDeck deck = singleSnapshot.getValue(StoreDeck.class);
+                    count++;
+                    if (count == PAGE_SIZE + 1) {
+                        lastTimestamp = deck.getCreatedAt();
+                        break;
+                    }
                     deckList.add(deck);
                 }
-
-                adapter.notifyDataSetChanged();
-                activity.findViewById(R.id.loading_panel_store).setVisibility(View.GONE);
+                if (count < PAGE_SIZE + 1) {
+                    lastTimestamp = (long)1e15 - 1;
+                }
+                onFinish.run();
             }
 
             @Override
