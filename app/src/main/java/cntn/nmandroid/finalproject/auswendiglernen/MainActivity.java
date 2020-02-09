@@ -266,6 +266,9 @@ public class MainActivity extends AppCompatActivity
 
             Deck obj = (Deck) listView.getItemAtPosition(acmi.position);
             MenuItem item = menu.findItem(R.id.context_menu_item_title_main);
+            if (acmi.position == 0) {
+                menu.findItem(R.id.context_menu_item_publish_main).setEnabled(false);
+            }
 
             SpannableString s = new SpannableString(obj.getName());
             s.setSpan(new ForegroundColorSpan(Color.RED), 0, s.length(), 0);
@@ -307,8 +310,6 @@ public class MainActivity extends AppCompatActivity
         dialog.setArguments(args);
 
         dialog.show(getSupportFragmentManager(), "NameDialogFragment");
-
-
     }
 
     // The dialog fragment receives a reference to this Activity through the

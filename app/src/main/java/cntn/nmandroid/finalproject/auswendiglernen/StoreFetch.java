@@ -30,6 +30,10 @@ public class StoreFetch {
     }
 
     static public void InsertDeck(Deck deck, final Activity activity) {
+        if (deck.getNoteList().isEmpty()) {
+            Toast.makeText(activity, "Cannot publish an empty deck", Toast.LENGTH_SHORT).show();
+            return;
+        }
         activity.findViewById(R.id.progress_bar_main).setVisibility(View.VISIBLE);
         for (Note note : deck.getNoteList()) {
             InsertType(note.getNoteType());
